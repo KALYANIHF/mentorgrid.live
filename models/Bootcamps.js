@@ -3,54 +3,96 @@ const BootCampSchema = mongoose.Schema(
   {
     name: {
       type: String,
-      required: true,
+      required: [true, "The name is required"],
       unique: true,
+      trim: true,
+      maxlength: [50, "Name can't be more than 50 characters"],
     },
+    slug: String,
     description: {
       type: String,
       required: true,
+      maxlength: 500,
     },
-    price: {
-      type: Number,
-      required: true,
-    },
-    duration: {
-      type: Number,
-      required: true,
-    },
-    level: {
+    website: {
       type: String,
-      required: true,
+      match: [
+        /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+~#=]*)*$/,
+        "Please enter a valid URL",
+      ],
+    },
+    phone: {
+      type: String,
+      required: [true, "The phone number is required"],
+    },
+    email: {
+      type: String,
+      required: [true, "The email is required"],
+      match: [
+        /^[\w-]+(\.[\w-]+)*@[\w-]+\.[\w-]{2,6}$/,
+        "Please enter a valid email",
+      ],
+    },
+    address: {
+      type: String,
+      required: [true, "The address is required"],
+      maxlength: 300,
+    },
+    location: {
+      // Geo json point
+      type: {
+        type: String,
+        enum: ["Points"],
+      },
+      coordinates: {
+        type: [Number],
+        index: "2dshpere",
+      },
+      formattedAddress: String,
+      street: String,
+      city: String,
+      zipcode: String,
+      country: String,
+    },
+    careers: {
+      type: [String],
+      require: true,
+      enum: [
+        "Web Development",
+        "Mobile Development",
+        "UI/UX",
+        "Data Science",
+        "Business",
+        "Other",
+      ],
     },
     averageRating: {
       type: Number,
-      default: 0,
+      min: [1, "Rating must be at least 1"],
+      max: [10, "Rating can not be more then 10"],
     },
-    averageRatingCount: {
-      type: Number,
-      default: 0,
-    },
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-    },
-    category: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Category",
-    },
-    tags: {
-      type: [String],
-      default: [],
-    },
-    image: {
+    averageCost: Number,
+    photo: {
       type: String,
-      required: true,
+      default: "no-photo.jpg",
+    },
+    housing: {
+      type: Boolean,
+      default: false,
+    },
+    jobAssistance: {
+      type: Boolean,
+      default: false,
+    },
+    jobGuarantee: {
+      type: Boolean,
+      default: false,
+    },
+    acceptGi: {
+      type: Boolean,
+      default: true,
     },
     createdAt: {
-      type: Date,
-      default: Date.now,
-    },
-    updatedAt: {
       type: Date,
       default: Date.now,
     },

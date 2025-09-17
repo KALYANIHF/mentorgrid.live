@@ -7,9 +7,11 @@ const colors = require("colors");
 const fs = require("fs");
 const morgan = require("morgan");
 const dbConnect = require("./config/db");
+const errorHandler = require("./middleware/errorHandler");
 dbConnect();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(errorHandler);
 if (process.env.NODE_ENV === "development") {
   app.use(
     morgan("dev", {
