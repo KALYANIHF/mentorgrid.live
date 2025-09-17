@@ -11,7 +11,6 @@ const errorHandler = require("./middleware/errorHandler");
 dbConnect();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(errorHandler);
 if (process.env.NODE_ENV === "development") {
   app.use(
     morgan("dev", {
@@ -22,6 +21,7 @@ if (process.env.NODE_ENV === "development") {
   );
 }
 app.use("/api/v1/bootcamps", bootcampRouter);
+app.use(errorHandler);
 
 const handler = app.listen(PORT, () => {
   console.log(
