@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const slugify = require("slugify");
 const BootCampSchema = mongoose.Schema(
   {
     name: {
@@ -104,4 +105,10 @@ const BootCampSchema = mongoose.Schema(
     toJSON: { virtuals: true },
   }
 );
+BootCampSchema.pre("save", async function (next) {
+  console.log(this.name);
+  // slagify the the name
+  this.slug = slugify(this.name, { lower: true });
+  next();
+});
 module.exports = mongoose.model("Bootcamp", BootCampSchema);

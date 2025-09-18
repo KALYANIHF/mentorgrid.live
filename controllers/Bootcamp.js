@@ -1,6 +1,7 @@
 const Bootcamp = require("../models/Bootcamps");
 const errorResponse = require("../handlers/errorResponse");
 const asyncHandler = require("../handlers/asyncHandler");
+
 /**
  * @desc Get all bootcamps
  * @route GET /api/v1/bootcamps
@@ -8,17 +9,17 @@ const asyncHandler = require("../handlers/asyncHandler");
  */
 const getBootcamps = asyncHandler(async (req, res, next) => {
   const bootcamps = await Bootcamp.find();
-  if (!bootcamps) {
-    return new errorResponse("No Bootcamps Found", 500);
+
+  if (bootcamps.length === 0) {
+    return next(new errorResponse("No Bootcamps Found", 404));
   }
-  if (bootcamps) {
-    res.status(200).json({
-      success: true,
-      count: bootcamps.length,
-      message: "Bootcamps retrieved successfully",
-      data: bootcamps,
-    });
-  }
+
+  res.status(200).json({
+    success: true,
+    count: bootcamps.length,
+    message: "Bootcamps retrieved successfully",
+    data: bootcamps,
+  });
 });
 
 /**
@@ -27,18 +28,17 @@ const getBootcamps = asyncHandler(async (req, res, next) => {
  * @access Public
  */
 const getBootCampById = asyncHandler(async (req, res, next) => {
-  const id = req.params.id;
-  const bootcamp = await Bootcamp.findById(id);
+  const bootcamp = await Bootcamp.findById(req.params.id);
+
   if (!bootcamp) {
-    return new errorResponse("No Bootcamp Found", 500);
+    return next(new errorResponse("No Bootcamp Found", 404));
   }
-  if (bootcamp) {
-    res.status(200).json({
-      success: true,
-      message: `Bootcamp retrieved successfully for id ${id}`,
-      data: bootcamp,
-    });
-  }
+
+  res.status(200).json({
+    success: true,
+    message: `Bootcamp retrieved successfully for id ${req.params.id}`,
+    data: bootcamp,
+  });
 });
 
 /**
@@ -48,16 +48,12 @@ const getBootCampById = asyncHandler(async (req, res, next) => {
  */
 const createBootcamp = asyncHandler(async (req, res, next) => {
   const bootcamp = await Bootcamp.create(req.body);
-  if (!bootcamp) {
-    return new errorResponse("Failed to create Bootcamp", 500);
-  }
-  if (bootcamp) {
-    res.status(201).json({
-      success: true,
-      message: "Bootcamp created successfully",
-      data: bootcamp,
-    });
-  }
+
+  res.status(201).json({
+    success: true,
+    message: "Bootcamp created successfully",
+    data: bootcamp,
+  });
 });
 
 /**
@@ -66,25 +62,20 @@ const createBootcamp = asyncHandler(async (req, res, next) => {
  * @access Private
  */
 const updateBootcamp = asyncHandler(async (req, res, next) => {
-  const id = req.params.id;
-  const bootcamp = await Bootcamp.findById(id);
-  if (!bootcamp) {
-    return new errorResponse("No Bootcamp Found", 500);
-  }
-  if (bootcamp) {
-    const updateData = await Bootcamp.findByIdAndUpdate(id, req.body, {
-      new: true,
-      runValidators: true,
-    });
+  const bootcamp = await Bootcamp.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
 
-    if (updateData) {
-      res.status(200).json({
-        success: true,
-        message: `Bootcamp updated successfully for id ${id}`,
-        data: updateData,
-      });
-    }
+  if (!bootcamp) {
+    return next(new errorResponse("No Bootcamp Found", 404));
   }
+
+  res.status(200).json({
+    success: true,
+    message: `Bootcamp updated successfully for id ${req.params.id}`,
+    data: bootcamp,
+  });
 });
 
 /**
@@ -93,17 +84,16 @@ const updateBootcamp = asyncHandler(async (req, res, next) => {
  * @access Private
  */
 const deleteBootcamp = asyncHandler(async (req, res, next) => {
-  const id = req.params.id;
-  const bootcamp = await Bootcamp.findByIdAndDelete(id);
+  const bootcamp = await Bootcamp.findByIdAndDelete(req.params.id);
+
   if (!bootcamp) {
-    return new errorResponse("No Bootcamp Found", 500);
+    return next(new errorResponse("No Bootcamp Found", 404));
   }
-  if (bootcamp) {
-    res.status(200).json({
-      success: true,
-      message: `Bootcamp deleted successfully for id ${id}`,
-    });
-  }
+
+  res.status(200).json({
+    success: true,
+    message: `Bootcamp deleted successfully for id ${req.params.id}`,
+  });
 });
 
 module.exports = {
