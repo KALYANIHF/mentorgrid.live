@@ -51,11 +51,11 @@ const BootCampSchema = mongoose.Schema(
       // Geo json point
       type: {
         type: String,
-        enum: ["Points"],
+        enum: ["Point"],
       },
       coordinates: {
         type: [Number],
-        index: "2dshpere",
+        index: "2dsphere",
       },
       formattedAddress: String,
       street: String,
