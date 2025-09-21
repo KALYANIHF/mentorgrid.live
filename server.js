@@ -5,10 +5,12 @@ const PORT = process.env.PORT || 3000;
 const bootcampRouter = require("./routes/bootcamp");
 const colors = require("colors");
 const fs = require("fs");
+const qs = require("qs");
 const morgan = require("morgan");
 const dbConnect = require("./config/db");
 const errorHandler = require("./middleware/errorHandler");
 dbConnect();
+app.set("query parser", (str) => qs.parse(str));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 if (process.env.NODE_ENV === "development") {

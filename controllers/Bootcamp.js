@@ -1,5 +1,5 @@
 const Bootcamp = require("../models/Bootcamps");
-const errorResponse = require("../handlers/errorResponse");
+const ErrorResponse = require("../handlers/errorResponse");
 const asyncHandler = require("../handlers/asyncHandler");
 const geocoder = require("../handlers/geocoder");
 
@@ -9,15 +9,76 @@ const geocoder = require("../handlers/geocoder");
  * @access Public
  */
 const getBootcamps = asyncHandler(async (req, res, next) => {
-  const bootcamps = await Bootcamp.find();
+  let reqQuery = { ...req.query };
+
+  const page = parseInt(req.query.page, 10) || 1;
+  const limit = parseInt(req.query.limit, 10) || 25;
+  const skip = (page - 1) * limit;
+
+  // Fields to remove
+  const removeQuery = [
+    "select",
+    "sort",
+    "limit",
+    "page",
+    "lean",
+    "populate",
+    "leanPopulate",
+    "leanVirtuals",
+    "leanVirtualsPopulate",
+  ];
+  removeQuery.forEach((key) => delete reqQuery[key]);
+
+  // Format Mongo operators
+  let queryStr = JSON.stringify(reqQuery);
+  queryStr = queryStr.replace(
+    /\b(gte|lte|ne|gt|lt|in)\b/g,
+    (match) => `$${match}`
+  );
+
+  // Base query
+  let query = Bootcamp.find(JSON.parse(queryStr));
+
+  // Select fields
+  if (req.query.select) {
+    query = query.select(req.query.select.split(",").join(" "));
+  }
+
+  // Sort
+  if (req.query.sort) {
+    query = query.sort(req.query.sort.split(",").join(" "));
+  } else {
+    query = query.sort("-createdAt");
+  }
+
+  // Pagination
+  query = query.skip(skip).limit(limit);
+
+  const bootcamps = await query;
+  const total = await Bootcamp.countDocuments(JSON.parse(queryStr));
 
   if (bootcamps.length === 0) {
-    return next(new errorResponse("No Bootcamps Found", 404));
+    return res.status(200).json({
+      success: true,
+      count: 0,
+      total,
+      page,
+      pages: Math.ceil(total / limit),
+      hasNextPage: page * limit < total,
+      hasPrevPage: page > 1,
+      message: "No bootcamps found for this query",
+      data: [],
+    });
   }
 
   res.status(200).json({
     success: true,
     count: bootcamps.length,
+    total,
+    page,
+    pages: Math.ceil(total / limit),
+    hasNextPage: page * limit < total,
+    hasPrevPage: page > 1,
     message: "Bootcamps retrieved successfully",
     data: bootcamps,
   });
@@ -32,7 +93,7 @@ const getBootCampById = asyncHandler(async (req, res, next) => {
   const bootcamp = await Bootcamp.findById(req.params.id);
 
   if (!bootcamp) {
-    return next(new errorResponse("No Bootcamp Found", 404));
+    return next(new ErrorResponse("No Bootcamp Found", 404));
   }
 
   res.status(200).json({
@@ -69,7 +130,7 @@ const updateBootcamp = asyncHandler(async (req, res, next) => {
   });
 
   if (!bootcamp) {
-    return next(new errorResponse("No Bootcamp Found", 404));
+    return next(new ErrorResponse("No Bootcamp Found", 404));
   }
 
   res.status(200).json({
@@ -88,7 +149,7 @@ const deleteBootcamp = asyncHandler(async (req, res, next) => {
   const bootcamp = await Bootcamp.findByIdAndDelete(req.params.id);
 
   if (!bootcamp) {
-    return next(new errorResponse("No Bootcamp Found", 404));
+    return next(new ErrorResponse("No Bootcamp Found", 404));
   }
 
   res.status(200).json({
@@ -110,7 +171,7 @@ const getBootcampsByRadius = asyncHandler(async (req, res, next) => {
   const lat = geoData[0].latitude;
   const lng = geoData[0].longitude;
   // calc the radius using radians
-  const radius = distance / 6378; // convert distance to radians in miles in km
+  const radius = distance / 6378; // convert distance to radians in km
   const bootcamps = await Bootcamp.find({
     location: {
       $geoWithin: {
@@ -118,8 +179,8 @@ const getBootcampsByRadius = asyncHandler(async (req, res, next) => {
       },
     },
   });
-  if (!bootcamps) {
-    return next(new errorResponse("No Bootcamps Found", 404));
+  if (bootcamps.length === 0) {
+    return next(new ErrorResponse("No Bootcamps Found", 404));
   }
   res.status(200).json({
     success: true,

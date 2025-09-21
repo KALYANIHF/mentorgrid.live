@@ -60,8 +60,10 @@ const BootCampSchema = mongoose.Schema(
       formattedAddress: String,
       street: String,
       city: String,
+      state: String,
       zipcode: String,
       country: String,
+      provider: String,
     },
     careers: {
       type: [String],
@@ -132,9 +134,24 @@ BootCampSchema.pre("save", async function (next) {
     street: loc[0].streetName,
     city: loc[0].city,
     zipcode: loc[0].zipcode,
-    state: loc[0].administrativeLevels?.level1long || "",
+    state: loc[0].state,
     country: loc[0].countryCode,
+    provider: loc[0].provider,
   };
+  /**
+    latitude: 42.3508609,
+    longitude: -71.1038666,
+    formattedAddress: 'Alan & Sherry Leventhal Center, 233, Bay State Road, Audubon Circle, Fenway, Boston, Suffolk County, Massachusetts, 02215, United States',
+    country: 'United States',
+    city: 'Boston',
+    state: 'Massachusetts',
+    zipcode: '02215',
+    streetName: 'Bay State Road',
+    streetNumber: '233',
+    countryCode: 'US',
+    neighbourhood: 'Audubon Circle',
+    provider: 'openstreetmap'
+   */
   this.address = undefined;
   next();
 });
