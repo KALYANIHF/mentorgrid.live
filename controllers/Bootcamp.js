@@ -54,7 +54,7 @@ const getBootcamps = asyncHandler(async (req, res, next) => {
   // Pagination
   query = query.skip(skip).limit(limit);
 
-  const bootcamps = await query;
+  const bootcamps = await query.populate("courses");
   const total = await Bootcamp.countDocuments(JSON.parse(queryStr));
 
   if (bootcamps.length === 0) {

@@ -36,7 +36,26 @@ const getCourse = asyncHandler(async (req, res, next) => {});
 
 /**
  * @desc Create a new course
- * route POST /api/v1/courses
- * access Private
+ * @route POST /api/v1/courses
+ * @access Private
  */
-module.exports = { getallCourses, getCourse };
+const createCourse = asyncHandler(async (req, res, next) => {});
+/**
+ * @desc Update a course
+ * @route PUT /api/v1/courses/:id
+ * @access Private
+ */
+const updateCourse = asyncHandler(async (req, res, next) => {});
+/**
+ * @desc Delete a course
+ * @route DELETE /api/v1/courses/:id
+ * @access Private
+ */
+const deleteCourse = asyncHandler(async (req, res, next) => {});
+module.exports = {
+  getallCourses,
+  getCourse,
+  updateCourse,
+  deleteCourse,
+  createCourse,
+};

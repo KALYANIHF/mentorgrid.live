@@ -3,6 +3,7 @@ const app = express();
 require("@dotenvx/dotenvx").config();
 const PORT = process.env.PORT || 3000;
 const bootcampRouter = require("./routes/bootcamp");
+const courseRouter = require("./routes/course");
 const colors = require("colors");
 const fs = require("fs");
 const qs = require("qs");
@@ -23,6 +24,7 @@ if (process.env.NODE_ENV === "development") {
   );
 }
 app.use("/api/v1/bootcamps", bootcampRouter);
+app.use("/api/v1/courses", courseRouter);
 app.use(errorHandler);
 
 const handler = app.listen(PORT, () => {

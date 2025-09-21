@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
-const CourseSchema = mongoose.Schema({
+
+const CourseSchema = new mongoose.Schema({
   title: {
     type: String,
     trim: true,
@@ -10,7 +11,7 @@ const CourseSchema = mongoose.Schema({
     required: [true, "Please enter a course Description"],
   },
   weeks: {
-    type: String,
+    type: Number,
     required: [true, "Please enter the number of weeks in the course"],
   },
   tuition: {
@@ -23,7 +24,7 @@ const CourseSchema = mongoose.Schema({
     enum: ["beginner", "intermediate", "advanced"],
   },
   scholarshipAvailable: {
-    type: String,
+    type: Boolean,
     default: false,
   },
   createdAt: {
@@ -35,6 +36,58 @@ const CourseSchema = mongoose.Schema({
     ref: "Bootcamp",
     required: true,
   },
+});
+
+// calculate the avg cost of all courses with aggregate function
+CourseSchema.statics.getAverageCost = async function (bootcampId) {
+  const obj = await this.aggregate([
+    { $match: { bootcamp: bootcampId } },
+    {
+      $group: {
+        _id: "$bootcamp",
+        averageCost: { $avg: "$tuition" },
+      },
+    },
+  ]);
+
+  try {
+    const update = obj.length
+      ? { averageCost: Math.ceil(obj[0].averageCost / 10) * 10 }
+      : { $unset: { averageCost: "" } };
+
+    await this.model("Bootcamp").findByIdAndUpdate(bootcampId, update);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+// After saving a course
+CourseSchema.post("save", async function () {
+  try {
+    await this.constructor.getAverageCost(this.bootcamp);
+  } catch (err) {
+    console.error(err);
+  }
+});
+
+// After removing with `course.remove()`
+CourseSchema.post("remove", async function () {
+  try {
+    await this.constructor.getAverageCost(this.bootcamp);
+  } catch (err) {
+    console.error(err);
+  }
+});
+
+// After deleting with `findByIdAndDelete` / `findOneAndDelete`
+CourseSchema.post("findOneAndDelete", async function (doc) {
+  if (doc) {
+    try {
+      await doc.constructor.getAverageCost(doc.bootcamp);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 });
 
 module.exports = mongoose.model("Course", CourseSchema);

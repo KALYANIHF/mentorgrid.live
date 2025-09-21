@@ -67,7 +67,7 @@ const BootCampSchema = mongoose.Schema(
     },
     careers: {
       type: [String],
-      require: true,
+      required: true,
       enum: [
         "Web Development",
         "Mobile Development",
@@ -82,7 +82,10 @@ const BootCampSchema = mongoose.Schema(
       min: [1, "Rating must be at least 1"],
       max: [10, "Rating can not be more then 10"],
     },
-    averageCost: Number,
+    averageCost: {
+      type: Number,
+      default: 0,
+    },
     photo: {
       type: String,
       default: "no-photo.jpg",
@@ -116,43 +119,54 @@ const BootCampSchema = mongoose.Schema(
   }
 );
 BootCampSchema.pre("save", async function (next) {
-  console.log(this.name);
   // slagify the the name
-  this.slug = slugify(this.name, { lower: true });
-  next();
-});
-
-BootCampSchema.pre("save", async function (next) {
+  if (this.isModified("name")) {
+    this.slug = slugify(this.name, { lower: true });
+  }
   if (!this.address) {
     return next();
   }
-  const loc = await geocoder.geocode(this.address);
-  this.location = {
-    type: "Point",
-    coordinates: [loc[0].longitude, loc[0].latitude],
-    formattedAddress: loc[0].formattedAddress,
-    street: loc[0].streetName,
-    city: loc[0].city,
-    zipcode: loc[0].zipcode,
-    state: loc[0].state,
-    country: loc[0].countryCode,
-    provider: loc[0].provider,
-  };
-  /**
-    latitude: 42.3508609,
-    longitude: -71.1038666,
-    formattedAddress: 'Alan & Sherry Leventhal Center, 233, Bay State Road, Audubon Circle, Fenway, Boston, Suffolk County, Massachusetts, 02215, United States',
-    country: 'United States',
-    city: 'Boston',
-    state: 'Massachusetts',
-    zipcode: '02215',
-    streetName: 'Bay State Road',
-    streetNumber: '233',
-    countryCode: 'US',
-    neighbourhood: 'Audubon Circle',
-    provider: 'openstreetmap'
-   */
-  this.address = undefined;
+  if (this.isModified("address") && this.address) {
+    try {
+      const loc = await geocoder.geocode(this.address);
+      if (loc.length > 0) {
+        this.location = {
+          type: "Point",
+          coordinates: [loc[0].longitude, loc[0].latitude],
+          formattedAddress: loc[0].formattedAddress,
+          street: loc[0].streetName,
+          city: loc[0].city,
+          zipcode: loc[0].zipcode,
+          state: loc[0].state,
+          country: loc[0].countryCode,
+          provider: loc[0].provider,
+        };
+        /**
+          latitude: 42.3508609,
+          longitude: -71.1038666,
+          formattedAddress: 'Alan & Sherry Leventhal Center, 233, Bay State Road, Audubon Circle, Fenway, Boston, Suffolk County, Massachusetts, 02215, United States',
+          country: 'United States',
+          city: 'Boston',
+          state: 'Massachusetts',
+          zipcode: '02215',
+          streetName: 'Bay State Road',
+          streetNumber: '233',
+          countryCode: 'US',
+          neighbourhood: 'Audubon Circle',
+          provider: 'openstreetmap'
+        */
+        this.address = undefined;
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
   next();
+});
+BootCampSchema.virtual("courses", {
+  ref: "Course",
+  foreignField: "bootcamp",
+  localField: "_id",
+  justOne: false,
 });
 module.exports = mongoose.model("Bootcamp", BootCampSchema);
