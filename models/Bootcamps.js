@@ -163,6 +163,11 @@ BootCampSchema.pre("save", async function (next) {
   }
   next();
 });
+// Course delete when a bootcamp is deleted
+BootCampSchema.pre("remove", async function (next) {
+  await this.model("Course").deleteMany({ bootcamp: this._id });
+  next();
+});
 BootCampSchema.virtual("courses", {
   ref: "Course",
   foreignField: "bootcamp",

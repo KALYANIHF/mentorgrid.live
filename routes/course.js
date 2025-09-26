@@ -1,5 +1,5 @@
 const express = require("express");
-const courseRouter = express.Router();
+const courseRouter = express.Router({ mergeParams: true });
 const {
   getallCourses,
   getCourse,
@@ -12,7 +12,8 @@ const {
 courseRouter.route("/").get(getallCourses).post(createCourse);
 courseRouter
   .route("/:id")
-  .post(updateCourse)
+  .put(updateCourse)
+  .patch(updateCourse)
   .delete(deleteCourse)
   .get(getCourse);
 
