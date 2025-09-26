@@ -7,13 +7,17 @@ const courseRouter = require("./routes/course");
 const colors = require("colors");
 const fs = require("fs");
 const qs = require("qs");
+const path = require("path");
 const morgan = require("morgan");
 const dbConnect = require("./config/db");
+const fileupload = require("express-fileupload");
 const errorHandler = require("./middleware/errorHandler");
 dbConnect();
 app.set("query parser", (str) => qs.parse(str));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(fileupload());
+app.use(express.static(path.join(__dirname, "public")));
 if (process.env.NODE_ENV === "development") {
   app.use(
     morgan("dev", {

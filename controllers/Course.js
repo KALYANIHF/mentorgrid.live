@@ -14,21 +14,18 @@ const getallCourses = asyncHandler(async (req, res, next) => {
   let query;
   if (req.params.bootcampId) {
     query = Course.find({ bootcamp: req.params.bootcampId });
-  } else {
-    query = Course.find().populate({
-      path: "bootcamp",
-      select: "name description",
+    const courses = await query;
+    if (courses.length === 0) {
+      return next(new ErrorResponse("No Course Found", 404));
+    }
+    res.status(200).json({
+      success: true,
+      message: "Courses retrieved successfully",
+      data: courses,
     });
+  } else {
+    res.status(200).json(res.advanceResults);
   }
-  const courses = await query;
-  if (courses.length === 0) {
-    return next(new ErrorResponse("No Course Found", 404));
-  }
-  res.status(200).json({
-    success: true,
-    message: "Courses retrieved successfully",
-    data: courses,
-  });
 });
 
 /**
