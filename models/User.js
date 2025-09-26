@@ -22,7 +22,14 @@ const userSchema = mongoose.Schema(
     password: {
       type: String,
       required: [true, "The password is required"],
+      minlength: [6, "Password must be at least 6 characters"],
       select: false,
+    },
+    resetPasswordToken: String,
+    resetPasswordExpires: Date,
+    active: {
+      type: Boolean,
+      default: true,
     },
     role: {
       type: String,
@@ -37,6 +44,19 @@ const userSchema = mongoose.Schema(
     updatedAt: {
       type: Date,
       default: Date.now,
+    },
+    profilePicture: {},
+    coverPhoto: {},
+    socialLinks: {},
+    bootcamp: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Bootcamp",
+      default: null,
+    },
+    courses: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Course",
+      default: [],
     },
   },
   {
