@@ -1,19 +1,22 @@
 const mongoose = require("mongoose");
 const slugify = require("slugify");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 const userSchema = mongoose.Schema(
   {
     name: {
       type: String,
       required: [true, "The name is required"],
-      unique: true,
       trim: true,
+      unique: [true, "The name must be Uniqe"],
       maxlength: [50, "Name can't be more than 50 characters"],
     },
     slug: String,
     email: {
       type: String,
       required: [true, "The email is required"],
+      unique: [true, "Email already exists"],
       match: [
         /^[\w-]+(\.[\w-]+)*@[\w-]+\.[\w-]{2,6}$/,
         "Please enter a valid email",
@@ -45,18 +48,20 @@ const userSchema = mongoose.Schema(
       type: Date,
       default: Date.now,
     },
-    profilePicture: {},
-    coverPhoto: {},
-    socialLinks: {},
-    bootcamp: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Bootcamp",
-      default: null,
+    profilePicture: {
+      type: String,
+      default: "no-image.png",
     },
-    courses: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Course",
-      default: [],
+    coverPhoto: {
+      type: String,
+      default: "no-image.png",
+    },
+    socialLinks: {
+      facebook: String,
+      twitter: String,
+      instagram: String,
+      linkedin: String,
+      github: String,
     },
   },
   {
@@ -67,8 +72,20 @@ const userSchema = mongoose.Schema(
 );
 
 userSchema.pre("save", async function (next) {
-  this.name = slugify(this.name, { lowerCase: true });
+  this.slug = slugify(this.name, { lowerCase: true });
+  // hash the password
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+  // console.log(this.password);
   next();
 });
+
+// sign JWT and return
+userSchema.methods.getsignJwtToken = async function () {
+  const token = await jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRE,
+  });
+  return token;
+};
 
 module.exports = mongoose.model("User", userSchema);
