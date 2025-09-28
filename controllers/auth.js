@@ -102,6 +102,99 @@ const sendtokenResponse = async (user, statusCode, res, message) => {
   });
 };
 
+/**
+ * @desc forget password and send reset password link
+ * @route /api/v1/auth/forgotpassword
+ * @access Public
+ */
+
+const forgotpassword = asyncHandler(async (req, res, next) => {
+  const { email } = req.body;
+  // validate the email
+  if (!email) {
+    return next(new ErrorResponse("Please provide email", 400));
+  }
+  // find the user by email
+  const user = await User.findOne({ email });
+  if (!user) {
+    return next(new ErrorResponse("No User Found", 404));
+  }
+  // generate the reset token
+  const resetToken = await user.getResetPasswordToken();
+  // save the reset token to the user model
+  await user.save({
+    validateBeforeSave: false,
+    resetPasswordToken: resetToken,
+    resetPasswordExpire: Date.now() + 10 * 60 * 1000, // 10 minutes
+  });
+  // send the reset password link to the user
+  const resetPasswordUrl = `${req.protocol}://${req.get(
+    "host"
+  )}/api/v1/auth/resetpassword/${resetToken}`;
+  const message = `Please click on the link below to reset your password \n ${resetPasswordUrl}`;
+  await sendEmail(email, message);
+  res.status(200).json({
+    success: true,
+    message: "Reset Password Link Sent Successfully",
+  });
+});
+
+/**
+ * @desc reset password
+ * @route /api/v1/auth/resetpassword/:token
+ * @access Public
+ */
+const resetpassword = asyncHandler(async (req, res, next) => {
+  const { token } = req.params;
+  // validate the token
+  const user = await User.findOne({
+    resetPasswordToken: token,
+    resetPasswordExpire: { $gt: Date.now() },
+  });
+  if (!user) {
+    return next(new ErrorResponse("Invalid Token", 400));
+  }
+  // set the new password
+  user.password = req.body.password;
+  user.resetPasswordToken = undefined;
+  user.resetPasswordExpire = undefined;
+  await user.save();
+  res.status(200).json({
+    success: true,
+    message: "Password Reset Successfully",
+  });
+});
+
+/**
+ * @desc update user details
+ * @route /api/v1/auth/updateuser
+ * @access Private
+ */
+
+const updateUserDetails = asyncHandler(async (req, res, next) => {
+  const { name, email, password, role } = req.body;
+  // validate the fields
+  if (!name || !email || !password || !role) {
+    return next(new ErrorResponse("Please provide all the fields", 400));
+  }
+  // find the user by id
+  const user = await User.findById(req.user.id);
+  if (!user) {
+    return next(new ErrorResponse("No User Found", 404));
+  }
+  // update the user details
+  user.name = name;
+  user.email = email;
+  user.role = role;
+  user.password = password;
+  await user.save();
+  res.status(200).json({
+    success: true,
+    message: "User Details Updated Successfully",
+    data: user,
+  });
+});
+
 module.exports = {
   registerUser,
   loginUser,

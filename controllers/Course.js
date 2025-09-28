@@ -52,7 +52,7 @@ const getCourse = asyncHandler(async (req, res, next) => {
  */
 const createCourse = asyncHandler(async (req, res, next) => {
   const bootcampId = req.body.bootcamp;
-  console.log(bootcampId);
+  req.body.user = req.user.id;
   const bootcamp = await Bootcamp.findById(bootcampId);
   if (!bootcamp) {
     return next(
@@ -60,6 +60,12 @@ const createCourse = asyncHandler(async (req, res, next) => {
         `No bootcamp with the id of ${bootcampId} is Found`,
         404
       )
+    );
+  }
+  // only the owner of the course and the admin will able to create a course
+  if (bootcamp.user.toString() !== req.user.id && req.user.role !== "admin") {
+    return next(
+      new ErrorResponse("You are not authorized to create a course", 403)
     );
   }
   const course = await Course.create(req.body);
@@ -75,13 +81,21 @@ const createCourse = asyncHandler(async (req, res, next) => {
  * @access Private
  */
 const updateCourse = asyncHandler(async (req, res, next) => {
-  const course = await Course.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true,
-  }).populate("bootcamp");
+  let course = await Course.findById(req.params.id);
   if (!course) {
     return next(new ErrorResponse("No Course Found", 404));
   }
+  // before update the course check if the user is the owner of the course or the admin
+  if (course.user.toString() !== req.user.id && req.user.role !== "admin") {
+    return next(
+      new ErrorResponse("You are not authorized to update a course", 403)
+    );
+  }
+  // update the course
+  course = await Course.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
   res.status(200).json({
     success: true,
     message: "Course updated successfully",
@@ -97,6 +111,12 @@ const deleteCourse = asyncHandler(async (req, res, next) => {
   const course = await Course.findByIdAndDelete(req.params.id);
   if (!course) {
     return next(new ErrorResponse("No Course Found", 404));
+  }
+  // before update the course check if the user is the owner of the course or the admin
+  if (course.user.toString() !== req.user.id && req.user.role !== "admin") {
+    return next(
+      new ErrorResponse("You are not authorized to update a course", 403)
+    );
   }
   res.status(200).json({
     success: true,

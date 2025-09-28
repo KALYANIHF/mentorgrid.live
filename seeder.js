@@ -55,11 +55,11 @@ const deleteData = async () => {
 (async () => {
   if (process.argv[2] === "-i") {
     await importData();
-    console.log(`Data imported ...`.green.underline);
+    console.log(`Data imported ...`.green.underline.inverse);
     process.exit();
   } else if (process.argv[2] === "-d") {
     await deleteData();
-    console.log(`Data Deleted ...`.red.underline);
+    console.log(`Data Deleted ...`.red.underline.inverse);
     process.exit();
   } else {
     console.log("Usage: node seeder.js -i (import) | -d (delete)".yellow);
