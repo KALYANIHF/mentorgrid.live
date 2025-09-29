@@ -120,8 +120,8 @@ const deleteCourse = asyncHandler(async (req, res, next) => {
   }
   res.status(200).json({
     success: true,
-    message: "Course deleted successfully",
-    data: course,
+    message: `Course deleted successfully with id ${req.params.id}`,
+    data: {},
   });
 });
 module.exports = {

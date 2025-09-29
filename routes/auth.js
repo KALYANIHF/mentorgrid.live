@@ -7,7 +7,7 @@ const {
   forgotpassword,
   resetpassword,
   updateUserDetails,
-} = require("../controllers/auth");
+} = require("../controllers/Auth");
 const User = require("../models/User");
 const { protect } = require("../middleware/auth");
 

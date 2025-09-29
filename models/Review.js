@@ -6,7 +6,7 @@ const reviewSchema = mongoose.Schema(
       type: String,
       required: [true, "The title is required"],
       trim: true,
-      maxlength: [50, "Title can't be more than 50 characters"],
+      maxlength: [100, "Title can't be more than 100 characters"],
     },
     rating: {
       type: Number,
@@ -37,11 +37,6 @@ const reviewSchema = mongoose.Schema(
       type: Date,
       default: Date.now,
     },
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: [true, "The user is required"],
-    },
   },
   {
     toJSON: {
@@ -49,5 +44,8 @@ const reviewSchema = mongoose.Schema(
     },
   }
 );
+
+// prevent the user from submitting more than one review
+reviewSchema.index({ bootcamp: 1, user: 1 }, { unique: true });
 
 module.exports = mongoose.model("Review", reviewSchema);

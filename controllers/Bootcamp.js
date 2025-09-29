@@ -117,6 +117,7 @@ const deleteBootcamp = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     success: true,
     message: `Bootcamp deleted successfully for id ${req.params.id}`,
+    data: {},
   });
 });
 
