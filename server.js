@@ -4,6 +4,7 @@ require("@dotenvx/dotenvx").config();
 const PORT = process.env.PORT || 3000;
 const bootcampRouter = require("./routes/bootcamp");
 const courseRouter = require("./routes/course");
+const authRouter = require("./routes/auth");
 const userRouter = require("./routes/user");
 const colors = require("colors");
 const fs = require("fs");
@@ -32,7 +33,8 @@ if (process.env.NODE_ENV === "development") {
 }
 app.use("/api/v1/bootcamps", bootcampRouter);
 app.use("/api/v1/courses", courseRouter);
-app.use("/api/v1/auth", userRouter);
+app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/users", userRouter);
 app.use(errorHandler);
 
 const handler = app.listen(PORT, () => {

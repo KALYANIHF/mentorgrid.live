@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const slugify = require("slugify");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
 
 const userSchema = mongoose.Schema(
   {
@@ -63,6 +64,16 @@ const userSchema = mongoose.Schema(
       linkedin: String,
       github: String,
     },
+    bootcamp: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Bootcamp",
+      required: false,
+    },
+    courses: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Course",
+      required: false,
+    },
   },
   {
     toJSON: {
@@ -72,12 +83,13 @@ const userSchema = mongoose.Schema(
 );
 
 userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) {
+    return next();
+  }
   this.slug = slugify(this.name, { lowerCase: true });
   // hash the password
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
-  // console.log(this.password);
-  next();
 });
 
 // sign JWT and return
@@ -95,7 +107,6 @@ userSchema.methods.getResetPasswordToken = async function () {
     .update(resetToken)
     .digest("hex");
   this.resetPasswordExpires = Date.now() + 10 * 60 * 1000;
-  await this.save({ validateBeforeSave: false });
   return resetToken;
 };
 

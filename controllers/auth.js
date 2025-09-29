@@ -2,6 +2,8 @@ const ErrorResponse = require("../handlers/errorResponse");
 const asyncHandler = require("../handlers/asyncHandler");
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
+const crypto = require("crypto");
+const sendEmail = require("../handlers/sendEmail");
 
 /**
  * @desc Register a User
@@ -104,7 +106,7 @@ const sendtokenResponse = async (user, statusCode, res, message) => {
 
 /**
  * @desc forget password and send reset password link
- * @route /api/v1/auth/forgotpassword
+ * @route POST /api/v1/auth/forgotpassword
  * @access Public
  */
 
@@ -121,35 +123,41 @@ const forgotpassword = asyncHandler(async (req, res, next) => {
   }
   // generate the reset token
   const resetToken = await user.getResetPasswordToken();
+
   // save the reset token to the user model
   await user.save({
     validateBeforeSave: false,
-    resetPasswordToken: resetToken,
-    resetPasswordExpire: Date.now() + 10 * 60 * 1000, // 10 minutes
   });
   // send the reset password link to the user
   const resetPasswordUrl = `${req.protocol}://${req.get(
     "host"
   )}/api/v1/auth/resetpassword/${resetToken}`;
-  const message = `Please click on the link below to reset your password \n ${resetPasswordUrl}`;
+  const message = `<p>Send reset password link to your email: <b>${email}</b></p> <p>Click on the link below to reset your password: <i><b>${resetPasswordUrl}</b></i></p> <p>This is valid for next 10 min</p> <p>Thanks</p> <p>Team</p>`;
   await sendEmail(email, message);
   res.status(200).json({
     success: true,
-    message: "Reset Password Link Sent Successfully",
+    message: "Password Reset Link Sent Successfully",
   });
 });
 
 /**
  * @desc reset password
- * @route /api/v1/auth/resetpassword/:token
+ * @route POST /api/v1/auth/resetpassword/:token
  * @access Public
  */
 const resetpassword = asyncHandler(async (req, res, next) => {
   const { token } = req.params;
+  console.log(token);
+  // decrypt the resetpasswordToken using token
+  const resetPasswordToken = crypto
+    .createHash("sha256")
+    .update(token)
+    .digest("hex");
+  console.log(resetPasswordToken);
   // validate the token
   const user = await User.findOne({
-    resetPasswordToken: token,
-    resetPasswordExpire: { $gt: Date.now() },
+    resetPasswordToken: resetPasswordToken,
+    resetPasswordExpires: { $gt: Date.now() },
   });
   if (!user) {
     return next(new ErrorResponse("Invalid Token", 400));
@@ -157,24 +165,21 @@ const resetpassword = asyncHandler(async (req, res, next) => {
   // set the new password
   user.password = req.body.password;
   user.resetPasswordToken = undefined;
-  user.resetPasswordExpire = undefined;
+  user.resetPasswordExpires = undefined;
   await user.save();
-  res.status(200).json({
-    success: true,
-    message: "Password Reset Successfully",
-  });
+  sendtokenResponse(user, 200, res, "Password Reset Successfully");
 });
 
 /**
  * @desc update user details
- * @route /api/v1/auth/updateuser
+ * @route PUT /api/v1/auth/updateuser
  * @access Private
  */
 
 const updateUserDetails = asyncHandler(async (req, res, next) => {
-  const { name, email, password, role } = req.body;
+  const { name, email } = req.body;
   // validate the fields
-  if (!name || !email || !password || !role) {
+  if (!name || !email) {
     return next(new ErrorResponse("Please provide all the fields", 400));
   }
   // find the user by id
@@ -185,8 +190,6 @@ const updateUserDetails = asyncHandler(async (req, res, next) => {
   // update the user details
   user.name = name;
   user.email = email;
-  user.role = role;
-  user.password = password;
   await user.save();
   res.status(200).json({
     success: true,
@@ -201,4 +204,7 @@ module.exports = {
   getCurrentUser,
   sendtokenResponse,
   logoutUser,
+  forgotpassword,
+  resetpassword,
+  updateUserDetails,
 };
