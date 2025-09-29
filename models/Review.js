@@ -47,5 +47,48 @@ const reviewSchema = mongoose.Schema(
 
 // prevent the user from submitting more than one review
 reviewSchema.index({ bootcamp: 1, user: 1 }, { unique: true });
+// define the statc method to calculate the avgRating for the review on add and remove
+reviewSchema.statics.getAverageRating = async function (bootcampId) {
+  const obj = await this.aggregate([
+    { $match: { bootcamp: bootcampId } },
+    {
+      $group: {
+        _id: "$bootcamp",
+        averageRating: { $avg: "$rating" },
+      },
+    },
+  ]);
+
+  if (obj.length > 0) {
+    try {
+      const update = obj.length
+        ? { averageRating: Math.ceil(obj[0].averageRating / 10) * 10 }
+        : { $unset: { averageRating: "" } };
+      await this.model("Bootcamp").findByIdAndUpdate(bootcampId, update);
+    } catch (err) {
+      console.error(err);
+    }
+  } else {
+    console.log("not able to add the avgRating");
+  }
+};
+
+reviewSchema.post("save", async function () {
+  try {
+    // this is calling
+    console.log("calling the avgRating after save");
+    await this.constructor.getAverageRating(this.bootcamp);
+  } catch (error) {
+    console.log(error);
+  }
+});
+reviewSchema.pre("remove", async function () {
+  try {
+    console.log("calling the avgRating before delete");
+    await this.constructor.getAverageRating(this.bootcamp);
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 module.exports = mongoose.model("Review", reviewSchema);

@@ -51,7 +51,6 @@ const createReview = asyncHandler(async (req, res, next) => {
       )
     );
   }
-  console.log(req.body);
   const review = await Review.create(req.body);
   res.status(201).json({
     success: true,
