@@ -9,7 +9,6 @@ const {
   resetpassword,
   updateUserDetails,
 } = require("../controllers/Auth");
-const User = require("../models/User");
 const { protect } = require("../middleware/auth");
 
 // define the routers for the users

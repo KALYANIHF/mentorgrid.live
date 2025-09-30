@@ -7,6 +7,12 @@ const courseRouter = require("./routes/course");
 const authRouter = require("./routes/auth");
 const userRouter = require("./routes/user");
 const reviewRouter = require("./routes/review");
+const expressMongoSanitize = require("express-mongo-sanitize");
+const helmet = require("helmet");
+const xss = require("xss-clean");
+const hpp = require("hpp");
+const expressLimit = require("express-rate-limit");
+const cors = require("cors");
 const colors = require("colors");
 const fs = require("fs");
 const qs = require("qs");
@@ -22,6 +28,31 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(fileupload());
 app.use(cookieParser());
+app.use((req, res, next) => {
+  req.body = expressMongoSanitize.sanitize(req.body);
+  req.params = expressMongoSanitize.sanitize(req.params);
+  req.query = expressMongoSanitize.sanitize(req.query); // store sanitized version separately
+  next();
+});
+app.use(helmet());
+// app.use(xss());
+app.use(
+  expressLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 10, // limit each IP to 100 requests per windowMs
+    standardHeaders: "draft-8",
+    legacyHeaders: false,
+    extended: false,
+    ipv6Subnet: 56,
+    message: "Too many requests from this IP, please try again later",
+  })
+); // limit the number of requests from each IP to 100 per 15 minutes
+app.use(hpp());
+app.use(
+  cors({
+    credentials: true,
+  })
+);
 app.use(express.static(path.join(__dirname, "public")));
 if (process.env.NODE_ENV === "development") {
   app.use(
