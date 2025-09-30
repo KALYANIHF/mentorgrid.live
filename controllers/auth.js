@@ -56,7 +56,7 @@ const loginUser = asyncHandler(async (req, res, next) => {
 
 /**
  * @desc logout user
- * @route /api/v1/auth/logout
+ * @route GET /api/v1/auth/logout
  * @access public
  */
 

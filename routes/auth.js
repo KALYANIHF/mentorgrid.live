@@ -3,6 +3,7 @@ const authRouter = express.Router();
 const {
   registerUser,
   loginUser,
+  logoutUser,
   getCurrentUser,
   forgotpassword,
   resetpassword,
@@ -14,6 +15,7 @@ const { protect } = require("../middleware/auth");
 // define the routers for the users
 authRouter.route("/register").post(registerUser);
 authRouter.route("/login").post(loginUser);
+authRouter.route("/loginout").get(logoutUser);
 authRouter.route("/me").get(protect, getCurrentUser);
 authRouter.route("/updatedetails").put(protect, updateUserDetails);
 authRouter.route("/forgetpassword").post(forgotpassword);
