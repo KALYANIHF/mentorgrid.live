@@ -8,8 +8,8 @@ const {
   forgotpassword,
   resetpassword,
   updateUserDetails,
-} = require("../controllers/Auth");
-const { protect } = require("../middleware/auth");
+} = require("../controllers/auth.js");
+const { protect } = require("../middleware/auth.js");
 
 // define the routers for the users
 authRouter.route("/register").post(registerUser);

@@ -9,7 +9,6 @@ const userRouter = require("./routes/user");
 const reviewRouter = require("./routes/review");
 const expressMongoSanitize = require("express-mongo-sanitize");
 const helmet = require("helmet");
-const swaggerDocs = require("./swagger");
 const xss = require("xss-clean");
 const hpp = require("hpp");
 const expressLimit = require("express-rate-limit");
@@ -64,7 +63,6 @@ if (process.env.NODE_ENV === "development") {
     })
   );
 }
-swaggerDocs(app, PORT);
 app.use("/api/v1/bootcamps", bootcampRouter);
 app.use("/api/v1/courses", courseRouter);
 app.use("/api/v1/auth", authRouter);
