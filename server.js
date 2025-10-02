@@ -9,6 +9,7 @@ const userRouter = require("./routes/user");
 const reviewRouter = require("./routes/review");
 const expressMongoSanitize = require("express-mongo-sanitize");
 const helmet = require("helmet");
+const swaggerDocs = require("./swagger");
 const xss = require("xss-clean");
 const hpp = require("hpp");
 const expressLimit = require("express-rate-limit");
@@ -39,7 +40,7 @@ app.use(helmet());
 app.use(
   expressLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 10, // limit each IP to 100 requests per windowMs
+    max: 1000, // limit each IP to 100 requests per windowMs
     standardHeaders: "draft-8",
     legacyHeaders: false,
     extended: false,
@@ -63,13 +64,13 @@ if (process.env.NODE_ENV === "development") {
     })
   );
 }
+swaggerDocs(app, PORT);
 app.use("/api/v1/bootcamps", bootcampRouter);
 app.use("/api/v1/courses", courseRouter);
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/reviews", reviewRouter);
 app.use(errorHandler);
-
 const handler = app.listen(PORT, () => {
   console.log(
     `The server is running in ${process.env.NODE_ENV} mode on port ${PORT}`
