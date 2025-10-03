@@ -13,7 +13,7 @@ const { protect, authorize } = require("../middleware/auth");
 
 userRouter.use(protect, authorize("admin"));
 
-// define the routers for the users
+// define the routers for the users info
 userRouter
   .route("/")
   .get(advanceResults(User, ["bootcamp", "courses"]), getUsers)
