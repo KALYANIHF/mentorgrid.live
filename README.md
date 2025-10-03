@@ -3,6 +3,8 @@
 MentorGrid.live is a backend API built with **Node.js** and **Express**, providing user authentication, course management, and enrollment functionality.  
 This project is designed for bootcamp-style applications where admins or publisher can publish courses and users can register, login, and enroll in thouse coures
 
+> Visit: [https://mentorgrid.live](https://mentorgrid.live)
+
 ---
 
 ## 🚀 Features
@@ -184,6 +186,11 @@ mentorgrid.live/
 - `npm run dev` – Start server with nodemon (for development)
 
 ---
+
+## 🚀 Deployment
+
+- Deploy to Render MCP Server
+- Deploy to Heroku
 
 ## 📖 Future Improvements
 
