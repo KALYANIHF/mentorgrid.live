@@ -1,1128 +1,978 @@
 {
-	"info": {
-		"_postman_id": "54cfa1bc-5c3c-498f-858a-925b650bee09",
-		"name": "mentorGridShop",
-		"description": "**MentorGrid API**\n\nMentorGrid is a **Bootcamp Handler API** built with **Node.js** and the **Express framework**, designed to power online learning platforms. It provides secure authentication, user management, and course handling features.\n\nWith MentorGrid, administrators can create and publish courses, while users can seamlessly browse and enroll in them. The API is backed by **MongoDB** with **Mongoose ODM** for efficient data modeling and validation.\n\n### **Key Features**\n\n- **Authentication & Authorization** – Register, login, and secure access with role-based permissions (Admin & User).\n    \n- **Course Management** – Admins can create, update, and publish bootcamp courses.\n    \n- **User Enrollment** – Users can explore available courses and enroll with ease.\n    \n- **Scalable Backend** – Built with RESTful design principles for flexibility and performance.\n    \n\nThis API serves as the backbone for bootcamp-style platforms, making it simple to manage learning programs, track enrollments, and scale with growing user bases.",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "11229028",
-		"_collection_link": "https://www.postman.com/souvikofficial/workspace/my-workspace/collection/11229028-54cfa1bc-5c3c-498f-858a-925b650bee09?action=share&source=collection_link&creator=11229028"
-	},
-	"item": [
-		{
-			"name": "BootCamps",
-			"item": [
-				{
-					"name": "Get all Bootcamps",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/bootcamps",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"bootcamps"
-							]
-						},
-						"description": "**GET /api/v1/bootcamps (public)**\n\nFetches a list of all available bootcamps from the MentorGrid API. Returns an array of bootcamp objects with details such as title, description, duration, and creator information. Useful for displaying all published bootcamps to users."
-					},
-					"response": []
-				},
-				{
-					"name": "Get a Single Bootcamp",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/bootcamps/68d98826ff5b951e24042103",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"bootcamps",
-								"68d98826ff5b951e24042103"
-							]
-						},
-						"description": "**GET /api/v1/bootcamps/:id (public)**\n\nRetrieves detailed information about a single bootcamp by its unique **ID**. This is a **public endpoint**, meaning no authentication is required. Returns a bootcamp object with fields such as title, description, duration, location, and other related data."
-					},
-					"response": []
-				},
-				{
-					"name": "Create a Bootcamp",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{TOKEN}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [
-							{
-								"key": "content-type",
-								"value": "application/json",
-								"description": "JSON format",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"name\": \"Devcentral Bootcamp 2\",\n    \"description\": \"Is coding your passion? Codemasters will give you the skills and the tools to become the best developer possible. We specialize in front end and full stack web development\",\n    \"website\": \"https://devcentral.com\",\n    \"phone\": \"(444) 444-4444\",\n    \"email\": \"enroll@devcentral.com\",\n    \"address\": \"45 Upper College Rd Kingston RI 02881\",\n    \"careers\": [\n      \"Mobile Development\",\n      \"Web Development\",\n      \"Data Science\",\n      \"Business\"\n    ],\n    \"housing\": false,\n    \"jobAssistance\": true,\n    \"jobGuarantee\": true,\n    \"acceptGi\": true\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{base_url}}/bootcamps/",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"bootcamps",
-								""
-							]
-						},
-						"description": "**POST /api/v1/bootcamps (private)**\n\nCreates a **new bootcamp** in the MentorGrid API. This is a **private endpoint**, accessible only to authenticated users with the appropriate role (e.g., Admin/Publisher).\n\nThe request body must include the necessary bootcamp details (such as title, description, duration, and location). On success, returns the newly created bootcamp object."
-					},
-					"response": []
-				},
-				{
-					"name": "Update a Bootcamp",
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"housing\": false,\n    \"jobAssistance\": false,\n    \"jobGuarantee\": true\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{base_url}}/bootcamps/68cb16775aba37dde59b8b16",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"bootcamps",
-								"68cb16775aba37dde59b8b16"
-							]
-						},
-						"description": "**PUT /api/v1/bootcamps/:id (private)**\n\nUpdates an existing bootcamp by its unique **ID**. This is a **private endpoint**, restricted to authenticated users with the correct role (e.g., Admin/Publisher).\n\nThe request body should include one or more fields to update (such as title, description, duration, or location). On success, returns the updated bootcamp object with the applied changes."
-					},
-					"response": []
-				},
-				{
-					"name": "Delete a Bootcamp",
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/bootcamps/5d725a037b292f5f8ceff787",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"bootcamps",
-								"5d725a037b292f5f8ceff787"
-							]
-						},
-						"description": "**DELETE /api/v1/bootcamps/:id (private)**\n\nDeletes a bootcamp by its unique **ID**. This is a **private endpoint**, accessible only to authenticated users with the appropriate role (e.g., Admin/Publisher).\n\nOn success, the bootcamp record is permanently removed from the database, and the response confirms successful deletion."
-					},
-					"response": []
-				},
-				{
-					"name": "Get bootcamp within a radius",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/bootcamps/radius/05405/30",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"bootcamps",
-								"radius",
-								"05405",
-								"30"
-							]
-						},
-						"description": "**Route:** GET /api/v1/bootcamps/:zipcode/:radius\n\n**Access:** Public\n\n**Description:**\n\nFetches all bootcamps located within a specified distance from a given zipcode. The :zipcode parameter is used as the center point, and :radius defines the distance (in miles or kilometers, depending on implementation). This route uses geospatial queries to return bootcamps that fall inside the defined circular area.\n\n**Parameters:**\n\n- zipcode _(string, required)_ → The central zipcode to search from.\n    \n- radius _(number, required)_ → The distance from the zipcode within which bootcamps should be returned."
-					},
-					"response": []
-				},
-				{
-					"name": "Upload Photos",
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "content-type",
-								"value": "application/json",
-								"description": "JSON format",
-								"type": "text"
-							},
-							{
-								"key": "",
-								"value": "",
-								"type": "text",
-								"disabled": true
-							}
-						],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "file",
-									"type": "file",
-									"src": "postman-cloud:///1f09aea4-50d4-4e10-b42a-8b535072bfdb"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{base_url}}/bootcamps/5d725a037b292f5f8ceff787/photos",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"bootcamps",
-								"5d725a037b292f5f8ceff787",
-								"photos"
-							],
-							"query": [
-								{
-									"key": "",
-									"value": "",
-									"disabled": true
-								}
-							]
-						},
-						"description": "### Upload Photo for Bootcamp\n\n- **Endpoint:** `PUT /api/v1/bootcamps/:bootcampId/photos`\n    \n- **Access:** Private (Admin)\n    \n- **Description:** Uploads a photo for a specific bootcamp. Only admins are allowed to perform this action. The photo will be stored on the server, and its reference will be saved in the bootcamp record.\n    \n\n**URL Parameters:**\n\n| Parameter | Type | Description |\n| --- | --- | --- |\n| `bootcampId` | String | The ID of the bootcamp to upload photo for. |\n\n**Request:**\n\n- Send a `multipart/form-data` request with the file field named `file`.\n    \n- Only image files (`.jpg`, `.jpeg`, `.png`) are allowed.\n    \n- Maximum file size: **1 MB** (can be configured).\n    \n\n**Example Request (using Postman):**\n\n- Set method to `PUT`\n    \n- URL: `/api/v1/bootcamps/12345bootcamp/photos`\n    \n- Body → form-data → Key: `file`, Type: File, Value: _choose an image file_\n    \n\n**Example Response:**\n\n``` json\n{\n  \"success\": true,\n  \"data\": \"photo_12345bootcamp.jpg\"\n}\n\n ```"
-					},
-					"response": []
-				}
-			],
-			"description": "**Bootcamps**  \nThis folder contains all routes related to **bootcamp management** in the MentorGrid API. These endpoints support full **CRUD operations** (Create, Read, Update, Delete) for bootcamps.\n\n| Method | Endpoint | Access | Description |\n| --- | --- | --- | --- |\n| GET | `/api/v1/bootcamps` | Public | Get all bootcamps |\n| GET | `/api/v1/bootcamps/:id` | Public | Get a single bootcamp by ID |\n| POST | `/api/v1/bootcamps` | Private | Create a new bootcamp |\n| PUT | `/api/v1/bootcamps/:id` | Private | Update an existing bootcamp by ID |\n| DELETE | `/api/v1/bootcamps/:id` | Private | Delete a bootcamp by ID |\n\nThese routes form the core of MentorGrid’s bootcamp handling system, allowing **users** to explore bootcamps and **admins/publishers** to manage them efficiently."
-		},
-		{
-			"name": "Users",
-			"item": [
-				{
-					"name": "Get Users",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{TOKEN}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [
-							{
-								"key": "content-type",
-								"value": "application/json",
-								"description": "JSON format",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/users",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"users"
-							]
-						},
-						"description": "## Get All Users\n\n**GET** `/api/v1/auth/users`  \n**Access:** Private (Admin only)\n\n### Description\n\nFetches all users from the database. Supports advanced query results (`res.advanceResults`) for filtering, pagination, and sorting."
-					},
-					"response": []
-				},
-				{
-					"name": "Get Single User",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{TOKEN}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [
-							{
-								"key": "content-type",
-								"value": "application/json",
-								"description": "JSON format",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/users/68d9880dff5b951e240420fe",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"users",
-								"68d9880dff5b951e240420fe"
-							]
-						},
-						"description": "**GET** /api/v1/auth/users/:id\n**Access:** Private (Admin only)\n\n### **Description**\nFetches a single user by their unique id."
-					},
-					"response": []
-				},
-				{
-					"name": "Update User",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{TOKEN}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PUT",
-						"header": [
-							{
-								"key": "content-type",
-								"value": "application/json",
-								"description": "JSON format",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"name\": \"sudoalphainfo@gmail.com\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{base_url}}/users/68d9880dff5b951e240420fe",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"users",
-								"68d9880dff5b951e240420fe"
-							]
-						},
-						"description": "## Update a User\n\n**PUT** `/api/v1/users/:id`  \n**Access:** Private (Admin/Publisher only)\n\n### Description\n\nUpdates details of an existing user by id.\n\n### request body:\n\n``` json\n{\n  \"name\": \"John Updated\",\n  \"role\": \"publisher\"\n}\n\n ```"
-					},
-					"response": []
-				},
-				{
-					"name": "Delete User",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{TOKEN}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "content-type",
-								"value": "application/json",
-								"description": "JSON format",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/users/68d9880dff5b951e240420fe",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"users",
-								"68d9880dff5b951e240420fe"
-							]
-						},
-						"description": "## Delete a User\n\nDELETE `/api/v1/users/:id`  \n**Access:** Private (Admin/Publisher only)\n\n### Description\n\nDeletes a user from the system by their id."
-					},
-					"response": []
-				},
-				{
-					"name": "Create User",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{TOKEN}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [
-							{
-								"key": "content-type",
-								"value": "application/json",
-								"description": "JSON format",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"name\": \"souvikinfo\",\n    \"email\": \"souvikinfo2new@gmail.com\",\n    \"password\": \"deltainfo\",\n    \"active\": true,\n    \"role\": \"admin\"\n}"
-						},
-						"url": {
-							"raw": "{{base_url}}/users",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"users"
-							]
-						},
-						"description": "## Create User\n\n**POST** `/api/v1/users`  \n**Access:** Private (Admin/Publisher only)\n\n### Description\n\nCreates a new user in the system.\n\n### Request Body\n\n``` json\n{\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"password\": \"securePassword123\",\n  \"role\": \"user\"\n}\n\n ```"
-					},
-					"response": []
-				}
-			],
-			"description": "# User Model\n\nThe **User** model stores user account information for the MentorGrid API. It handles authentication, authorization, and user-related profile details. Passwords are encrypted before saving, and users can be assigned different roles to manage access levels.\n\n## Fields\n\n- **name** (string, required, unique, max: 50)  \n    The user's full name. Stored as unique and trimmed. Example: `\"John Doe\"`.\n    \n- **slug** (string, auto-generated)  \n    A URL-friendly version of the user’s name, generated automatically with `slugify`.\n    \n- **email** (string, required, unique, valid email)  \n    User’s email address, must be unique and properly formatted.\n    \n- **password** (string, required, min: 6, select: false)  \n    Encrypted password, hidden from query results by default.\n    \n- **resetPasswordToken** (string)  \n    Token generated for password reset requests.\n    \n- **resetPasswordExpires** (date)  \n    Expiration time for the reset password token.\n    \n- **active** (boolean, default: true)  \n    Indicates whether the user account is active.\n    \n- **role** (string, enum: `user | admin | publisher`, default: `user`)  \n    Defines the user’s role in the system, controlling access level.\n    \n- **createdAt** (date, default: now)  \n    Timestamp when the user was created.\n    \n- **updatedAt** (date, default: now)  \n    Timestamp when the user was last updated.\n    \n- **profilePicture** (string, default: `no-image.png`)  \n    Profile image for the user.\n    \n- **coverPhoto** (string, default: `no-image.png`)  \n    Cover photo image for the user.\n    \n- **socialLinks** (object, optional)  \n    Links to user’s social media profiles:\n    \n    - `facebook`\n        \n    - `twitter`\n        \n    - `instagram`\n        \n    - `linkedin`\n        \n    - `github`\n        \n- **bootcamp** (ObjectId → Bootcamp, optional)  \n    Bootcamp reference, if the user is associated with one.\n    \n- **courses** (ObjectId → Course, optional)  \n    Course reference, if the user is associated with one.\n    \n---\n\n## Middleware\n\n- **`pre(\"save\")`**\n    \n    - If the password field is modified, it is hashed with `bcryptjs` before saving.\n        \n    - The `slug` is auto-generated from the name.\n        \n\n---\n\n## Instance Methods\n\n- **`getsignJwtToken()`**\n    \n    - Signs and returns a JSON Web Token (JWT) for authentication.\n        \n    - Payload contains the user’s ID.\n        \n    - Uses `process.env.JWT_SECRET` and `process.env.JWT_EXPIRE`.\n        \n- **`getResetPasswordToken()`**\n    \n    - Generates a random token for password reset.\n        \n    - Hashes the token and stores it in `resetPasswordToken`.\n        \n    - Sets `resetPasswordExpires` to 10 minutes from creation.\n        \n    - Returns the plain reset token to be sent via email.\n        \n\n---\n\n✅ With this model, the system supports **secure authentication**, **role-based access control**, and **profile customization**."
-		},
-		{
-			"name": "Courses",
-			"item": [
-				{
-					"name": "Get all Courses",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/courses?page=2&limit=2",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"courses"
-							],
-							"query": [
-								{
-									"key": "page",
-									"value": "2"
-								},
-								{
-									"key": "limit",
-									"value": "2"
-								}
-							]
-						},
-						"description": "# **Get All Courses (Public)**\n\nFetch all courses from the database. Supports filtering, sorting, field selection, and pagination through query parameters.\n\n**Query Parameters (optional)**\n\n- select (string) – Comma-separated fields to include, e.g., title,tuition,weeks\n    \n- sort (string) – Comma-separated fields to sort by. Prefix with - for descending, e.g., -tuition\n    \n- page (number) – Page number for pagination. Default: 1\n    \n- limit (number) – Number of results per page. Default: 25\n    \n\n**Example Request**\n\n```\nGET /api/v1/courses?select=title,tuition,bootcamp&sort=-tuition&page=2&limit=10\n\n ```\n\n**Success Response**\n\n``` json\n{\n    \"success\": true,\n    \"message\": \"Courses retrieved successfully\",\n    \"data\": [\n        {\n            \"_id\": \"5d725c84c4ded7bcb480eaa0\",\n            \"title\": \"Full Stack Web Development\",\n            \"description\": \"In this course you will learn full stack web development, first learning all about the frontend with HTML/CSS/JS/Vue and then the backend with Node.js/Express/MongoDB\",\n            \"weeks\": 12,\n            \"tuition\": 10000,\n            \"minimumSkill\": \"intermediate\",\n            \"scholarshipAvailable\": false,\n            \"bootcamp\": \"5d713995b721c3bb38c1f5d0\",\n            \"createdAt\": \"2025-09-21T19:58:43.423Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"5d725a4a7b292f5f8ceff789\",\n            \"title\": \"Front End Web Development\",\n            \"description\": \"This course will provide you with all of the essentials to become a successful frontend web developer. You will learn to master HTML, CSS and front end JavaScript, along with tools like Git, VSCode and front end frameworks like Vue\",\n            \"weeks\": 8,\n            \"tuition\": 8000,\n            \"minimumSkill\": \"beginner\",\n            \"scholarshipAvailable\": false,\n            \"bootcamp\": \"5d713995b721c3bb38c1f5d0\",\n            \"createdAt\": \"2025-09-21T19:58:43.422Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"5d725cb9c4ded7bcb480eaa1\",\n            \"title\": \"Full Stack Web Dev\",\n            \"description\": \"In this course you will learn all about the front end with HTML, CSS and JavaScript. You will master tools like Git and Webpack and also learn C# and ASP.NET with Postgres\",\n            \"weeks\": 10,\n            \"tuition\": 12000,\n            \"minimumSkill\": \"intermediate\",\n            \"scholarshipAvailable\": false,\n            \"bootcamp\": \"5d713a66ec8f2b88b8f830b8\",\n            \"createdAt\": \"2025-09-21T19:58:43.424Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"5d725cfec4ded7bcb480eaa4\",\n            \"title\": \"Data Science Program\",\n            \"description\": \"In this course you will learn Python for data science, machine learning and big data tools\",\n            \"weeks\": 10,\n            \"tuition\": 9000,\n            \"minimumSkill\": \"intermediate\",\n            \"scholarshipAvailable\": false,\n            \"bootcamp\": \"5d725a037b292f5f8ceff787\",\n            \"createdAt\": \"2025-09-21T19:58:43.425Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"5d725cfec4ded7bcb480eaa5\",\n            \"title\": \"Web Development\",\n            \"description\": \"This course will teach you how to build high quality web applications with technologies like React, Node.js, PHP & Laravel\",\n            \"weeks\": 8,\n            \"tuition\": 8000,\n            \"minimumSkill\": \"beginner\",\n            \"scholarshipAvailable\": false,\n            \"bootcamp\": \"5d725a1b7b292f5f8ceff788\",\n            \"createdAt\": \"2025-09-21T19:58:43.426Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"5d725cfec4ded7bcb480eaa6\",\n            \"title\": \"Software QA\",\n            \"description\": \"This course will teach you everything you need to know about quality assurance\",\n            \"weeks\": 6,\n            \"tuition\": 5000,\n            \"minimumSkill\": \"intermediate\",\n            \"scholarshipAvailable\": false,\n            \"bootcamp\": \"5d725a1b7b292f5f8ceff788\",\n            \"createdAt\": \"2025-09-21T19:58:43.426Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"5d725cfec4ded7bcb480eaa7\",\n            \"title\": \"IOS Development\",\n            \"description\": \"Get started building mobile applications for IOS using Swift and other tools\",\n            \"weeks\": 8,\n            \"tuition\": 6000,\n            \"minimumSkill\": \"intermediate\",\n            \"scholarshipAvailable\": false,\n            \"bootcamp\": \"5d725a1b7b292f5f8ceff788\",\n            \"createdAt\": \"2025-09-21T19:58:43.426Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"5d725cd2c4ded7bcb480eaa2\",\n            \"title\": \"UI/UX\",\n            \"description\": \"In this course you will learn to create beautiful interfaces. It is a mix of design and development to create modern user experiences on both web and mobile\",\n            \"weeks\": 12,\n            \"tuition\": 10000,\n            \"minimumSkill\": \"intermediate\",\n            \"scholarshipAvailable\": false,\n            \"bootcamp\": \"5d713a66ec8f2b88b8f830b8\",\n            \"createdAt\": \"2025-09-21T19:58:43.424Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"5d725ce8c4ded7bcb480eaa3\",\n            \"title\": \"Web Design & Development\",\n            \"description\": \"Get started building websites and web apps with HTML/CSS/JavaScript/PHP. We teach you\",\n            \"weeks\": 10,\n            \"tuition\": 12000,\n            \"minimumSkill\": \"beginner\",\n            \"scholarshipAvailable\": false,\n            \"bootcamp\": \"5d725a037b292f5f8ceff787\",\n            \"createdAt\": \"2025-09-21T19:58:43.425Z\",\n            \"__v\": 0\n        }\n    ]\n}\n\n ```\n\n## **Error Response**\n\n```\n{\n  \"success\": false,\n  \"error\": \"No Courses Found\",\n  \"data\": null\n}\n\n ```"
-					},
-					"response": []
-				},
-				{
-					"name": "Get Courses for a specific bootcamp",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/bootcamps/5d713995b721c3bb38c1f5d0/courses",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"bootcamps",
-								"5d713995b721c3bb38c1f5d0",
-								"courses"
-							]
-						},
-						"description": "### 3\\. Get Courses for a Specific Bootcamp\n\n- **Endpoint:** `GET /api/v1/bootcamps/:bootcampId/courses`\n    \n- **Access:** Public\n    \n- **Description:** Retrieves all courses that belong to a specific bootcamp. The `bootcampId` parameter in the URL identifies the bootcamp.\n    \n\n**URL Parameters:**\n\n| Parameter | Type | Description |\n| --- | --- | --- |\n| `bootcampId` | String | The ID of the bootcamp to filter courses by. |\n\n**Example Response:**\n\n``` json\n{\n  \"success\": true,\n  \"count\": 2,\n  \"data\": [\n    {\n      \"_id\": \"654321abcd\",\n      \"title\": \"Full Stack Web Development\",\n      \"description\": \"Learn to build web applications using Node.js, React, and MongoDB.\",\n      \"weeks\": 12,\n      \"tuition\": 1200,\n      \"minimumSkill\": \"beginner\",\n      \"scholarshipAvailable\": true,\n      \"bootcamp\": \"12345bootcamp\",\n      \"createdAt\": \"2025-09-24T10:00:00Z\"\n    },\n    {\n      \"_id\": \"654322efgh\",\n      \"title\": \"Frontend Development\",\n      \"description\": \"Master HTML, CSS, and JavaScript to build responsive websites.\",\n      \"weeks\": 8,\n      \"tuition\": 800,\n      \"minimumSkill\": \"beginner\",\n      \"scholarshipAvailable\": false,\n      \"bootcamp\": \"12345bootcamp\",\n      \"createdAt\": \"2025-09-24T10:00:00Z\"\n    }\n  ]\n}\n\n ```"
-					},
-					"response": []
-				},
-				{
-					"name": "Create a Course",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{TOKEN}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "Authorization",
-								"value": "Bearer {{vault:json-web-token}}",
-								"type": "text",
-								"disabled": true
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"title\": \"Web Development new Test 2\",\n    \"description\": \"This course will teach you how to build high quality web applications with technologies like React, Node.js, PHP & Laravel\",\n    \"weeks\": 8,\n    \"tuition\": 8000,\n    \"minimumSkill\": \"beginner\",\n    \"scholarshipsAvailable\": false,\n    \"bootcamp\": \"5d713995b721c3bb38c1f5d0\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{base_url}}/courses",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"courses"
-							]
-						},
-						"description": "### Create a New Course\n\n- **Endpoint:** `POST /api/v1/courses`\n    \n- **Access:** Private (Admin)\n    \n- **Description:** Creates a new course and associates it with a specific bootcamp. Only admins are allowed to perform this action.\n    \n\n**Request Body Parameters:**\n\n| Field | Type | Required | Description |\n| --- | --- | --- | --- |\n| `title` | String | Yes | The name of the course. |\n| `description` | String | Yes | A detailed description of the course. |\n| `weeks` | Number | Yes | Duration of the course in weeks. |\n| `tuition` | Number | Yes | Tuition cost for the course. |\n| `minimumSkill` | String | Yes | Required skill level (`beginner`, `intermediate`, `advanced`). |\n| `scholarshipAvailable` | Boolean | No | Indicates if scholarships are available (default: `false`). |\n| `bootcamp` | ObjectId | Yes | The ID of the bootcamp this course belongs to. |\n\n**Example Request:**\n\n``` json\n{\n  \"title\": \"Advanced JavaScript\",\n  \"description\": \"Deep dive into ES6+, asynchronous programming, and modern JS frameworks.\",\n  \"weeks\": 6,\n  \"tuition\": 900,\n  \"minimumSkill\": \"intermediate\",\n  \"scholarshipAvailable\": true,\n  \"bootcamp\": \"12345bootcamp\"\n}\n\n ```"
-					},
-					"response": []
-				},
-				{
-					"name": "Get Single Course",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/courses/5d725c84c4ded7bcb480eaa0",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"courses",
-								"5d725c84c4ded7bcb480eaa0"
-							]
-						},
-						"description": "## Get a Single Course\n\n- **Endpoint:** `GET /api/v1/courses/:id`\n    \n- **Access:** Public\n    \n\n### Description\n\nRetrieves details of a single course by its unique ID. The response includes the course information along with selected details of the associated bootcamp (e.g., name and description)."
-					},
-					"response": []
-				},
-				{
-					"name": "Update a Course",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"title\": \"Web Development\",\n    \"description\": \"This course will teach you how to build high quality web applications with technologies like React, Node.js, PHP & Laravel\",\n    \"weeks\": 8,\n    \"tuition\": 8000,\n    \"minimumSkill\": \"advanced\",\n    \"scholarshipsAvailable\": false,\n    \"bootcamp\": \"5d725a1b7b292f5f8ceff788\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{base_url}}/courses/68d68ec44fc5d289f466da17",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"courses",
-								"68d68ec44fc5d289f466da17"
-							]
-						},
-						"description": "### Update a Course\n\n- **Endpoint:** `PUT /api/v1/courses/:id`\n    \n- **Access:** Private (Admin)\n    \n- **Description:** Updates an existing course by its ID. Only admins are allowed to perform this action. You can send one or multiple fields to update.\n    \n\n**URL Parameters:**\n\n| Parameter | Type | Description |\n| --- | --- | --- |\n| `id` | String | The ID of the course to update. |\n\n**Request Body Parameters:** (Send only the fields you want to update)\n\n| Field | Type | Description |\n| --- | --- | --- |\n| `title` | String | The name of the course. |\n| `description` | String | A detailed description of the course. |\n| `weeks` | Number | Duration of the course in weeks. |\n| `tuition` | Number | Tuition cost for the course. |\n| `minimumSkill` | String | Required skill level (`beginner`, `intermediate`, `advanced`). |\n| `scholarshipAvailable` | Boolean | Indicates if scholarships are available. |\n| `bootcamp` | ObjectId | The ID of the bootcamp this course belongs to. |"
-					},
-					"response": []
-				},
-				{
-					"name": "Delete a Course",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/courses/5d725c84c4ded7bcb480eaa0",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"courses",
-								"5d725c84c4ded7bcb480eaa0"
-							]
-						},
-						"description": "### Delete a Course\n\n- **Endpoint:** `DELETE /api/v1/courses/:id`\n    \n- **Access:** Private (Admin)\n    \n- **Description:** Deletes a specific course by its ID. Only admins are allowed to perform this action. Once deleted, the course cannot be recovered.\n    \n\n**URL Parameters:**\n\n| Parameter | Type | Description |\n| --- | --- | --- |\n| `id` | String | The ID of the course to delete. |"
-					},
-					"response": []
-				}
-			],
-			"description": "# **Courses API Documentation**\n\n**Course Model**\n\nA **Course** represents a learning module that users can enroll in. Each course belongs to a bootcamp and includes detailed information for students.\n\n**Schema Fields:**\n\n| **Field** | **Type** | **Description** |\n| --- | --- | --- |\n| title | String | The name of the course. **Required.** |\n| description | String | A detailed description of the course. **Required.** |\n| weeks | Number | Duration of the course in weeks. **Required.** |\n| tuition | Number | Cost of the course. **Required.** |\n| minimumSkill | String | Skill level required (beginner, intermediate, advanced). **Required.** |\n| scholarshipAvailable | Boolean | Whether scholarships are available. Default: false. |\n| bootcamp | ObjectId | Reference to the Bootcamp this course belongs to. **Required.** |\n| createdAt | Date | Date the course was created. Default: Date.now |\n\n---\n\n---\n\n### **Notes**\n\n- All responses include a success boolean and data object/array.\n    \n- Courses are **always associated with a bootcamp**.\n    \n- Query parameters for GET /api/v1/courses may include select, sort, page, and limit."
-		},
-		{
-			"name": "Ratings",
-			"item": [
-				{
-					"name": "Get Reviews",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [
-							{
-								"key": "content-type",
-								"value": "application/json",
-								"description": "JSON format",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/reviews",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"reviews"
-							]
-						},
-						"description": "## Get All Reviews\n\n**GET** `/api/v1/reviews`\n\n**Access:** Public\n\n---\n\n### Description\n\nFetches all reviews. Supports advanced query filtering, sorting, and pagination using middleware (\\`res.advanceResults\\`).\n\n### Example Response\n\n``` json\n{\n  \"success\": true,\n  \"count\": 2,\n  \"data\": [\n    {\n      \"_id\": \"6512a8f9e18a5b3c9c1aab77\",\n      \"title\": \"Great Bootcamp\",\n      \"text\": \"I learned so much here!\",\n      \"rating\": 9,\n      \"bootcamp\": \"6512a8f9e18a5b3c9c1aab12\",\n      \"user\": \"6501a8f9e18a5b3c9c1aab15\"\n    },\n    {\n      \"_id\": \"6512a8f9e18a5b3c9c1aab78\",\n      \"title\": \"Not bad\",\n      \"text\": \"Good instructors but could improve the projects.\",\n      \"rating\": 7,\n      \"bootcamp\": \"6512a8f9e18a5b3c9c1aab13\",\n      \"user\": \"6501a8f9e18a5b3c9c1aab16\"\n    }\n  ]\n}\n\n ```"
-					},
-					"response": []
-				},
-				{
-					"name": "Get a Review",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [
-							{
-								"key": "content-type",
-								"value": "application/json",
-								"description": "JSON format",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/reviews/5d7a514b5d2c12c7449be027",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"reviews",
-								"5d7a514b5d2c12c7449be027"
-							]
-						},
-						"description": "## Get a Single Review\n\n**GET** `/api/v1/reviews/:id`\n\n**Access:** Public\n\n---\n\n### Description\n\nFetches a single review by its id. Populates related bootcamp and user fields (only name is returned).\n\n### Example Response\n\n``` json\n{\n  {\n  \"success\": true,\n  \"message\": \"Found Review\",\n  \"data\": {\n    \"_id\": \"6512a8f9e18a5b3c9c1aab77\",\n    \"title\": \"Great Bootcamp\",\n    \"text\": \"I learned so much here!\",\n    \"rating\": 9,\n    \"bootcamp\": {\n      \"_id\": \"6512a8f9e18a5b3c9c1aab12\",\n      \"name\": \"Code Mastery Bootcamp\"\n    },\n    \"user\": {\n      \"_id\": \"6501a8f9e18a5b3c9c1aab15\",\n      \"name\": \"John Doe\"\n    }\n  }\n}\n}\n\n ```\n\n### Request Parameters\n\n- `id` (required): The ID of the review to fetch."
-					},
-					"response": []
-				},
-				{
-					"name": "Create a Review",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{TOKEN}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [
-							{
-								"key": "content-type",
-								"value": "application/json",
-								"description": "JSON format",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"title\": \"Learned a ton!\",\n    \"comment\": \"This is a outstanding bootcamp and i love it\",\n    \"rating\": 8\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{base_url}}/reviews/bootcamp/5d725a1b7b292f5f8ceff788",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"reviews",
-								"bootcamp",
-								"5d725a1b7b292f5f8ceff788"
-							]
-						},
-						"description": "### Create a Rating\n\n**POST** `/api/v1/reviews/:bootcampId/ratings`  \n**Access:** Private/admin\n\n---\n\n### Description\n\nCreates a rating for a specific bootcamp. Populates related bootcamp field (only name is returned).\n\n### Request Body:\n\n``` json\n{\n  \"title\": \"Great Bootcamp\",\n  \"text\": \"The instructors were amazing and the content was well structured.\",\n  \"rating\": 10\n}\n\n ```\n\n### Request Params\n\n- `bootcampId` (required): The ID of the bootcamp to rate."
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Review",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{TOKEN}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "content-type",
-								"value": "application/json",
-								"description": "JSON format",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/reviews/68db12d2a0e024fefe4a0daf",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"reviews",
-								"68db12d2a0e024fefe4a0daf"
-							]
-						},
-						"description": "### Delete a Rating\n\n**DELETE** `/api/v1/reviews/:id`\n**Access:** Private/admin\n\n---\n\n### Description\n\nDeletes a rating for a specific review. Populates related bootcamp field (only name is returned).\n\n### Request Params\n\n- `id` (required): The ID of the review to delete."
-					},
-					"response": []
-				},
-				{
-					"name": "Update a Review",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{TOKEN}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PUT",
-						"header": [
-							{
-								"key": "content-type",
-								"value": "application/json",
-								"description": "JSON format",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"rating\": 9\n}"
-						},
-						"url": {
-							"raw": "{{base_url}}/reviews/68db12d2a0e024fefe4a0daf",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"reviews",
-								"68db12d2a0e024fefe4a0daf"
-							]
-						},
-						"description": "### Update a Rating\n\n**PUT** `/api/v1/reviews/:id`  \n**Access:** Private/admin\n\n---\n\n### Description\n\nUpdates a rating for a specific review. Populates related bootcamp field (only name is returned).\n\n### Request Body:\n\n``` json\n{\n  \"title\": \"Updated Review\",\n  \"rating\": 8\n}\n\n ```\n\n### Request Params\n\n- `id` (required): The ID of the review to update."
-					},
-					"response": []
-				}
-			],
-			"description": "# Rating/Review Model\n\nThe **Review** model stores feedback submitted by users for specific bootcamps. Each review includes a title, numerical rating, and detailed comment. Reviews are tied to both the user who submitted them and the bootcamp they are reviewing.\n\n## Fields\n\n- **title** (string, required, max: 100)  \n    A short, descriptive title for the review. Example: `\"Great Bootcamp Experience\"`.\n    \n- **rating** (number, required, range: 1–10)  \n    Numerical score provided by the user, where `1` = very poor and `10` = excellent.\n    \n- **comment** (string, required, max: 500)  \n    The detailed feedback from the user about their experience.\n    \n- **user** (ObjectId → User, required)  \n    Reference to the **User** who submitted the review. Ensures only registered users can leave reviews.\n    \n- **bootcamp** (ObjectId → Bootcamp, required)  \n    Reference to the **Bootcamp** being reviewed.\n    \n- **createdAt** (Date, default: now)  \n    The date and time when the review was created.\n    \n- **updatedAt** (Date, default: now)  \n    The date and time when the review was last updated.\n    \n\n## Indexes & Constraints\n\n- **Unique per user & bootcamp**:  \n    Each user can submit **only one review per bootcamp**.\n    \n\n``` javascript\nreviewSchema.index({ bootcamp: 1, user: 1 }, { unique: true });\n\n ```"
-		},
-		{
-			"name": "Authentication",
-			"item": [
-				{
-					"name": "register user",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.environment.set(\"TOKEN\", pm.response.json().token);"
-								],
-								"type": "text/javascript",
-								"packages": {},
-								"requests": {}
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "content-type",
-								"value": "application/json",
-								"description": "JSON format",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"name\": \"Souvik 2\",\n    \"email\": \"souvikinfo-new@gmail.com\",\n    \"role\": \"admin\",\n    \"password\": \"12345667\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{base_url}}/auth/register",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"auth",
-								"register"
-							]
-						},
-						"description": "## Register a User\n\n**POST** `/api/v1/auth/register`\n\n**Access:** Public\n\n---\n\n### Description\n\nRegisters a new user in the system with `name`, `email`, `password`, and `role`. Returns a JWT token and user details.\n\n### Request Body\n\n``` json\n{\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"password\": \"secret123\",\n  \"role\": \"user\"\n}\n\n ```\n\n### Example Response\n\n``` json\n{\n  \"success\": true,\n  \"message\": \"User Registerd Successfully\",\n  \"data\": {\n    \"_id\": \"6501a8f9e18a5b3c9c1aab12\",\n    \"name\": \"John Doe\",\n    \"email\": \"john@example.com\",\n    \"role\": \"user\",\n    \"createdAt\": \"2025-10-01T10:30:00.000Z\"\n  },\n  \"token\": \"jwt_token_here\"\n}\n\n ```"
-					},
-					"response": []
-				},
-				{
-					"name": "login user",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.environment.set(\"TOKEN\", pm.response.json().token);"
-								],
-								"type": "text/javascript",
-								"packages": {},
-								"requests": {}
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "POST",
-						"header": [
-							{
-								"key": "content-type",
-								"value": "application/json",
-								"description": "JSON format",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"email\": \"souvikinfo-new@gmail.com\",\n    \"password\": \"12345667\"\n}"
-						},
-						"url": {
-							"raw": "{{base_url}}/auth/login",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"auth",
-								"login"
-							]
-						},
-						"description": "### Login User\n\n**POST** `/api/v1/auth/login`  \n**Access:** Public\n\n---\n\n### Description\n\nLogs in a user using email and password. Returns a JWT token and user details.\n\n### Request Body:\n\n``` json\n{\n  \"email\": \"john@example.com\",\n  \"password\": \"secret123\"\n}\n\n ```"
-					},
-					"response": []
-				},
-				{
-					"name": "Get Login User by Token",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{TOKEN}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [
-							{
-								"key": "content-type",
-								"value": "application/json",
-								"description": "JSON format",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"email\": \"admin44@gmail.com\",\n    \"password\": \"12345667\"\n}"
-						},
-						"url": {
-							"raw": "{{base_url}}/auth/me",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"auth",
-								"me"
-							]
-						},
-						"description": "### Get Current User\n\n**GET** `/api/v1/auth/me`\n**Access:** Private/admin or publisher (JWT Token required)\n\n---\n\n### Description\n\nRetrieves the currently logged-in user’s details using their JWT token."
-					},
-					"response": []
-				},
-				{
-					"name": "forgetPassword",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "content-type",
-								"value": "application/json",
-								"description": "JSON format",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"email\": \"souvikinfo@gmail.com\"\n}"
-						},
-						"url": {
-							"raw": "{{base_url}}/auth/forgetpassword",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"auth",
-								"forgetpassword"
-							]
-						},
-						"description": "### Forgot Password\n\n**GET** `/api/v1/auth/forgotpassword`  \n**Access:** Public\n\n---\n\n### Description\n\nGenerates a reset password token and sends a reset link to the user’s email.\n\n### Request Body\n\n``` json\n{\n  \"email\": \"john@example.com\"\n}\n\n ```"
-					},
-					"response": []
-				},
-				{
-					"name": "reset password",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "content-type",
-								"value": "application/json",
-								"description": "JSON format",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"password\": \"deltainfo\"\n}"
-						},
-						"url": {
-							"raw": "{{base_url}}/auth/resetpassword/793459f5b7e926fab7573ac6f9d171e084a909b2",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"auth",
-								"resetpassword",
-								"793459f5b7e926fab7573ac6f9d171e084a909b2"
-							]
-						},
-						"description": "### Reset Password\n\n**POST** `/api/v1/auth/resetpassword/:token`  \n**Access:** Public\n\n---\n\n### Description\n\nResets the user's password using the provided reset token and new password.\n\n### Request Body:\n\n``` json\n{\n  \"success\": true,\n  \"message\": \"Password Reset Successfully\",\n  \"token\": \"jwt_token_here\"\n}\n\n ```\n\n### Request Params\n\n- `token` (required): The reset password token received in the email."
-					},
-					"response": []
-				},
-				{
-					"name": "update user details",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{TOKEN}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PUT",
-						"header": [
-							{
-								"key": "content-type",
-								"value": "application/json",
-								"description": "JSON format",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"email\": \"souvikinfo2@gmail.com\",\n    \"name\": \"Souvik-demo\"\n}"
-						},
-						"url": {
-							"raw": "{{base_url}}/auth/updatedetails",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"auth",
-								"updatedetails"
-							]
-						},
-						"description": "### Update User Details\n\n**PUT** `/api/v1/auth/updateuser`  \n**Access:** Private/admin or publisher (JWT Token required)\n\n---\n\n### Description\n\nUpdates the details of a user using their JWT token. Only the fields provided in the request body will be updated.\n\n### Request Body:\n\n``` json\n{\n  \"name\": \"Updated Name\",\n  \"email\": \"updated@example.com\"\n}\n\n ```"
-					},
-					"response": []
-				},
-				{
-					"name": "Logout User",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/api/v1/auth/logout",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"auth",
-								"logout"
-							]
-						},
-						"description": "### Logout User\n\n**GET** `/api/v1/auth/logout`\n**Access:** Public\n\n---\n\n### Description\n\nLogs out the current user by clearing the JWT cookie."
-					},
-					"response": []
-				}
-			],
-			"description": "# Auth API Endpoints\n\nAuthentication and authorization routes for the MentorGrid API.  \nThese endpoints manage user registration, login, JWT tokens, password reset, and user profile updates."
-		}
-	],
-	"event": [
-		{
-			"listen": "prerequest",
-			"script": {
-				"type": "text/javascript",
-				"packages": {},
-				"exec": [
-					""
-				]
-			}
-		},
-		{
-			"listen": "test",
-			"script": {
-				"type": "text/javascript",
-				"packages": {},
-				"exec": [
-					""
-				]
-			}
-		}
-	],
-	"variable": [
-		{
-			"key": "base_url",
-			"value": ""
-		}
-	]
+  "info": {
+    "_postman_id": "17254b81-ea13-4145-b651-c0a24b691ba9",
+    "name": "mentorGrid",
+    "description": "**MentorGrid API**\n\nMentorGrid is a **Bootcamp Handler API** built with **Node.js** and the **Express framework**, designed to power online learning platforms. It provides secure authentication, user management, and course handling features.\n\nWith MentorGrid, administrators can create and publish courses, while users can seamlessly browse and enroll in them. The API is backed by **MongoDB** with **Mongoose ODM** for efficient data modeling and validation.\n\n### **Key Features**\n\n- **Authentication & Authorization** – Register, login, and secure access with role-based permissions (Admin & User).\n    \n- **Course Management** – Admins can create, update, and publish bootcamp courses.\n    \n- **User Enrollment** – Users can explore available courses and enroll with ease.\n    \n- **Scalable Backend** – Built with RESTful design principles for flexibility and performance.\n    \n\nThis API serves as the backbone for bootcamp-style platforms, making it simple to manage learning programs, track enrollments, and scale with growing user bases.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "11229028",
+    "_collection_link": "https://www.postman.com/souvikofficial/workspace/my-workspace/collection/11229028-17254b81-ea13-4145-b651-c0a24b691ba9?action=share&source=collection_link&creator=11229028"
+  },
+  "item": [
+    {
+      "name": "BootCamps",
+      "item": [
+        {
+          "name": "Get all Bootcamps",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/bootcamps",
+              "host": ["{{base_url}}"],
+              "path": ["bootcamps"]
+            },
+            "description": "**GET /api/v1/bootcamps (public)**\n\nFetches a list of all available bootcamps from the MentorGrid API. Returns an array of bootcamp objects with details such as title, description, duration, and creator information. Useful for displaying all published bootcamps to users."
+          },
+          "response": []
+        },
+        {
+          "name": "Get a Single Bootcamp",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/bootcamps/68d98826ff5b951e24042103",
+              "host": ["{{base_url}}"],
+              "path": ["bootcamps", "68d98826ff5b951e24042103"]
+            },
+            "description": "**GET /api/v1/bootcamps/:id (public)**\n\nRetrieves detailed information about a single bootcamp by its unique **ID**. This is a **public endpoint**, meaning no authentication is required. Returns a bootcamp object with fields such as title, description, duration, location, and other related data."
+          },
+          "response": []
+        },
+        {
+          "name": "Create a Bootcamp",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "content-type",
+                "value": "application/json",
+                "description": "JSON format",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Devcentral Bootcamp 2\",\n    \"description\": \"Is coding your passion? Codemasters will give you the skills and the tools to become the best developer possible. We specialize in front end and full stack web development\",\n    \"website\": \"https://devcentral.com\",\n    \"phone\": \"(444) 444-4444\",\n    \"email\": \"enroll@devcentral.com\",\n    \"address\": \"45 Upper College Rd Kingston RI 02881\",\n    \"careers\": [\n      \"Mobile Development\",\n      \"Web Development\",\n      \"Data Science\",\n      \"Business\"\n    ],\n    \"housing\": false,\n    \"jobAssistance\": true,\n    \"jobGuarantee\": true,\n    \"acceptGi\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/bootcamps/",
+              "host": ["{{base_url}}"],
+              "path": ["bootcamps", ""]
+            },
+            "description": "**POST /api/v1/bootcamps (private)**\n\nCreates a **new bootcamp** in the MentorGrid API. This is a **private endpoint**, accessible only to authenticated users with the appropriate role (e.g., Admin/Publisher).\n\nThe request body must include the necessary bootcamp details (such as title, description, duration, and location). On success, returns the newly created bootcamp object."
+          },
+          "response": []
+        },
+        {
+          "name": "Update a Bootcamp",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"housing\": false,\n    \"jobAssistance\": false,\n    \"jobGuarantee\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/bootcamps/68cb16775aba37dde59b8b16",
+              "host": ["{{base_url}}"],
+              "path": ["bootcamps", "68cb16775aba37dde59b8b16"]
+            },
+            "description": "**PUT /api/v1/bootcamps/:id (private)**\n\nUpdates an existing bootcamp by its unique **ID**. This is a **private endpoint**, restricted to authenticated users with the correct role (e.g., Admin/Publisher).\n\nThe request body should include one or more fields to update (such as title, description, duration, or location). On success, returns the updated bootcamp object with the applied changes."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete a Bootcamp",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/bootcamps/5d725a037b292f5f8ceff787",
+              "host": ["{{base_url}}"],
+              "path": ["bootcamps", "5d725a037b292f5f8ceff787"]
+            },
+            "description": "**DELETE /api/v1/bootcamps/:id (private)**\n\nDeletes a bootcamp by its unique **ID**. This is a **private endpoint**, accessible only to authenticated users with the appropriate role (e.g., Admin/Publisher).\n\nOn success, the bootcamp record is permanently removed from the database, and the response confirms successful deletion."
+          },
+          "response": []
+        },
+        {
+          "name": "Get bootcamp within a radius",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/bootcamps/radius/05405/30",
+              "host": ["{{base_url}}"],
+              "path": ["bootcamps", "radius", "05405", "30"]
+            },
+            "description": "**Route:** GET /api/v1/bootcamps/:zipcode/:radius\n\n**Access:** Public\n\n**Description:**\n\nFetches all bootcamps located within a specified distance from a given zipcode. The :zipcode parameter is used as the center point, and :radius defines the distance (in miles or kilometers, depending on implementation). This route uses geospatial queries to return bootcamps that fall inside the defined circular area.\n\n**Parameters:**\n\n- zipcode _(string, required)_ → The central zipcode to search from.\n    \n- radius _(number, required)_ → The distance from the zipcode within which bootcamps should be returned."
+          },
+          "response": []
+        },
+        {
+          "name": "Upload Photos",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "content-type",
+                "value": "application/json",
+                "description": "JSON format",
+                "type": "text"
+              },
+              {
+                "key": "",
+                "value": "",
+                "type": "text",
+                "disabled": true
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": "postman-cloud:///1f09aea4-50d4-4e10-b42a-8b535072bfdb"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/bootcamps/5d725a037b292f5f8ceff787/photos",
+              "host": ["{{base_url}}"],
+              "path": ["bootcamps", "5d725a037b292f5f8ceff787", "photos"],
+              "query": [
+                {
+                  "key": "",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "### Upload Photo for Bootcamp\n\n- **Endpoint:** `PUT /api/v1/bootcamps/:bootcampId/photos`\n    \n- **Access:** Private (Admin)\n    \n- **Description:** Uploads a photo for a specific bootcamp. Only admins are allowed to perform this action. The photo will be stored on the server, and its reference will be saved in the bootcamp record.\n    \n\n**URL Parameters:**\n\n| Parameter | Type | Description |\n| --- | --- | --- |\n| `bootcampId` | String | The ID of the bootcamp to upload photo for. |\n\n**Request:**\n\n- Send a `multipart/form-data` request with the file field named `file`.\n    \n- Only image files (`.jpg`, `.jpeg`, `.png`) are allowed.\n    \n- Maximum file size: **1 MB** (can be configured).\n    \n\n**Example Request (using Postman):**\n\n- Set method to `PUT`\n    \n- URL: `/api/v1/bootcamps/12345bootcamp/photos`\n    \n- Body → form-data → Key: `file`, Type: File, Value: _choose an image file_\n    \n\n**Example Response:**\n\n``` json\n{\n  \"success\": true,\n  \"data\": \"photo_12345bootcamp.jpg\"\n}\n\n ```"
+          },
+          "response": []
+        }
+      ],
+      "description": "**Bootcamps**  \nThis folder contains all routes related to **bootcamp management** in the MentorGrid API. These endpoints support full **CRUD operations** (Create, Read, Update, Delete) for bootcamps.\n\n| Method | Endpoint | Access | Description |\n| --- | --- | --- | --- |\n| GET | `/api/v1/bootcamps` | Public | Get all bootcamps |\n| GET | `/api/v1/bootcamps/:id` | Public | Get a single bootcamp by ID |\n| POST | `/api/v1/bootcamps` | Private | Create a new bootcamp |\n| PUT | `/api/v1/bootcamps/:id` | Private | Update an existing bootcamp by ID |\n| DELETE | `/api/v1/bootcamps/:id` | Private | Delete a bootcamp by ID |\n\nThese routes form the core of MentorGrid’s bootcamp handling system, allowing **users** to explore bootcamps and **admins/publishers** to manage them efficiently."
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get Users",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "content-type",
+                "value": "application/json",
+                "description": "JSON format",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/users",
+              "host": ["{{base_url}}"],
+              "path": ["users"]
+            },
+            "description": "## Get All Users\n\n**GET** `/api/v1/auth/users`  \n**Access:** Private (Admin only)\n\n### Description\n\nFetches all users from the database. Supports advanced query results (`res.advanceResults`) for filtering, pagination, and sorting."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Single User",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "content-type",
+                "value": "application/json",
+                "description": "JSON format",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/users/68d9880dff5b951e240420fe",
+              "host": ["{{base_url}}"],
+              "path": ["users", "68d9880dff5b951e240420fe"]
+            },
+            "description": "**GET** /api/v1/auth/users/:id\n**Access:** Private (Admin only)\n\n### **Description**\nFetches a single user by their unique id."
+          },
+          "response": []
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "content-type",
+                "value": "application/json",
+                "description": "JSON format",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"sudoalphainfo@gmail.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/users/68d9880dff5b951e240420fe",
+              "host": ["{{base_url}}"],
+              "path": ["users", "68d9880dff5b951e240420fe"]
+            },
+            "description": "## Update a User\n\n**PUT** `/api/v1/users/:id`  \n**Access:** Private (Admin/Publisher only)\n\n### Description\n\nUpdates details of an existing user by id.\n\n### request body:\n\n``` json\n{\n  \"name\": \"John Updated\",\n  \"role\": \"publisher\"\n}\n\n ```"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "content-type",
+                "value": "application/json",
+                "description": "JSON format",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/users/68d9880dff5b951e240420fe",
+              "host": ["{{base_url}}"],
+              "path": ["users", "68d9880dff5b951e240420fe"]
+            },
+            "description": "## Delete a User\n\nDELETE `/api/v1/users/:id`  \n**Access:** Private (Admin/Publisher only)\n\n### Description\n\nDeletes a user from the system by their id."
+          },
+          "response": []
+        },
+        {
+          "name": "Create User",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "content-type",
+                "value": "application/json",
+                "description": "JSON format",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"souvikinfo\",\n    \"email\": \"souvikinfo2new@gmail.com\",\n    \"password\": \"deltainfo\",\n    \"active\": true,\n    \"role\": \"admin\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users",
+              "host": ["{{base_url}}"],
+              "path": ["users"]
+            },
+            "description": "## Create User\n\n**POST** `/api/v1/users`  \n**Access:** Private (Admin/Publisher only)\n\n### Description\n\nCreates a new user in the system.\n\n### Request Body\n\n``` json\n{\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"password\": \"securePassword123\",\n  \"role\": \"user\"\n}\n\n ```"
+          },
+          "response": []
+        }
+      ],
+      "description": "# User Model\n\nThe **User** model stores user account information for the MentorGrid API. It handles authentication, authorization, and user-related profile details. Passwords are encrypted before saving, and users can be assigned different roles to manage access levels.\n\n## Fields\n\n- **name** (string, required, unique, max: 50)  \n    The user's full name. Stored as unique and trimmed. Example: `\"John Doe\"`.\n    \n- **slug** (string, auto-generated)  \n    A URL-friendly version of the user’s name, generated automatically with `slugify`.\n    \n- **email** (string, required, unique, valid email)  \n    User’s email address, must be unique and properly formatted.\n    \n- **password** (string, required, min: 6, select: false)  \n    Encrypted password, hidden from query results by default.\n    \n- **resetPasswordToken** (string)  \n    Token generated for password reset requests.\n    \n- **resetPasswordExpires** (date)  \n    Expiration time for the reset password token.\n    \n- **active** (boolean, default: true)  \n    Indicates whether the user account is active.\n    \n- **role** (string, enum: `user | admin | publisher`, default: `user`)  \n    Defines the user’s role in the system, controlling access level.\n    \n- **createdAt** (date, default: now)  \n    Timestamp when the user was created.\n    \n- **updatedAt** (date, default: now)  \n    Timestamp when the user was last updated.\n    \n- **profilePicture** (string, default: `no-image.png`)  \n    Profile image for the user.\n    \n- **coverPhoto** (string, default: `no-image.png`)  \n    Cover photo image for the user.\n    \n- **socialLinks** (object, optional)  \n    Links to user’s social media profiles:\n    \n    - `facebook`\n        \n    - `twitter`\n        \n    - `instagram`\n        \n    - `linkedin`\n        \n    - `github`\n        \n- **bootcamp** (ObjectId → Bootcamp, optional)  \n    Bootcamp reference, if the user is associated with one.\n    \n- **courses** (ObjectId → Course, optional)  \n    Course reference, if the user is associated with one.\n    \n---\n\n## Middleware\n\n- **`pre(\"save\")`**\n    \n    - If the password field is modified, it is hashed with `bcryptjs` before saving.\n        \n    - The `slug` is auto-generated from the name.\n        \n\n---\n\n## Instance Methods\n\n- **`getsignJwtToken()`**\n    \n    - Signs and returns a JSON Web Token (JWT) for authentication.\n        \n    - Payload contains the user’s ID.\n        \n    - Uses `process.env.JWT_SECRET` and `process.env.JWT_EXPIRE`.\n        \n- **`getResetPasswordToken()`**\n    \n    - Generates a random token for password reset.\n        \n    - Hashes the token and stores it in `resetPasswordToken`.\n        \n    - Sets `resetPasswordExpires` to 10 minutes from creation.\n        \n    - Returns the plain reset token to be sent via email.\n        \n\n---\n\n✅ With this model, the system supports **secure authentication**, **role-based access control**, and **profile customization**."
+    },
+    {
+      "name": "Courses",
+      "item": [
+        {
+          "name": "Get all Courses",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/courses?page=2&limit=2",
+              "host": ["{{base_url}}"],
+              "path": ["courses"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "2"
+                },
+                {
+                  "key": "limit",
+                  "value": "2"
+                }
+              ]
+            },
+            "description": "# **Get All Courses (Public)**\n\nFetch all courses from the database. Supports filtering, sorting, field selection, and pagination through query parameters.\n\n**Query Parameters (optional)**\n\n- select (string) – Comma-separated fields to include, e.g., title,tuition,weeks\n    \n- sort (string) – Comma-separated fields to sort by. Prefix with - for descending, e.g., -tuition\n    \n- page (number) – Page number for pagination. Default: 1\n    \n- limit (number) – Number of results per page. Default: 25\n    \n\n**Example Request**\n\n```\nGET /api/v1/courses?select=title,tuition,bootcamp&sort=-tuition&page=2&limit=10\n\n ```\n\n**Success Response**\n\n``` json\n{\n    \"success\": true,\n    \"message\": \"Courses retrieved successfully\",\n    \"data\": [\n        {\n            \"_id\": \"5d725c84c4ded7bcb480eaa0\",\n            \"title\": \"Full Stack Web Development\",\n            \"description\": \"In this course you will learn full stack web development, first learning all about the frontend with HTML/CSS/JS/Vue and then the backend with Node.js/Express/MongoDB\",\n            \"weeks\": 12,\n            \"tuition\": 10000,\n            \"minimumSkill\": \"intermediate\",\n            \"scholarshipAvailable\": false,\n            \"bootcamp\": \"5d713995b721c3bb38c1f5d0\",\n            \"createdAt\": \"2025-09-21T19:58:43.423Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"5d725a4a7b292f5f8ceff789\",\n            \"title\": \"Front End Web Development\",\n            \"description\": \"This course will provide you with all of the essentials to become a successful frontend web developer. You will learn to master HTML, CSS and front end JavaScript, along with tools like Git, VSCode and front end frameworks like Vue\",\n            \"weeks\": 8,\n            \"tuition\": 8000,\n            \"minimumSkill\": \"beginner\",\n            \"scholarshipAvailable\": false,\n            \"bootcamp\": \"5d713995b721c3bb38c1f5d0\",\n            \"createdAt\": \"2025-09-21T19:58:43.422Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"5d725cb9c4ded7bcb480eaa1\",\n            \"title\": \"Full Stack Web Dev\",\n            \"description\": \"In this course you will learn all about the front end with HTML, CSS and JavaScript. You will master tools like Git and Webpack and also learn C# and ASP.NET with Postgres\",\n            \"weeks\": 10,\n            \"tuition\": 12000,\n            \"minimumSkill\": \"intermediate\",\n            \"scholarshipAvailable\": false,\n            \"bootcamp\": \"5d713a66ec8f2b88b8f830b8\",\n            \"createdAt\": \"2025-09-21T19:58:43.424Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"5d725cfec4ded7bcb480eaa4\",\n            \"title\": \"Data Science Program\",\n            \"description\": \"In this course you will learn Python for data science, machine learning and big data tools\",\n            \"weeks\": 10,\n            \"tuition\": 9000,\n            \"minimumSkill\": \"intermediate\",\n            \"scholarshipAvailable\": false,\n            \"bootcamp\": \"5d725a037b292f5f8ceff787\",\n            \"createdAt\": \"2025-09-21T19:58:43.425Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"5d725cfec4ded7bcb480eaa5\",\n            \"title\": \"Web Development\",\n            \"description\": \"This course will teach you how to build high quality web applications with technologies like React, Node.js, PHP & Laravel\",\n            \"weeks\": 8,\n            \"tuition\": 8000,\n            \"minimumSkill\": \"beginner\",\n            \"scholarshipAvailable\": false,\n            \"bootcamp\": \"5d725a1b7b292f5f8ceff788\",\n            \"createdAt\": \"2025-09-21T19:58:43.426Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"5d725cfec4ded7bcb480eaa6\",\n            \"title\": \"Software QA\",\n            \"description\": \"This course will teach you everything you need to know about quality assurance\",\n            \"weeks\": 6,\n            \"tuition\": 5000,\n            \"minimumSkill\": \"intermediate\",\n            \"scholarshipAvailable\": false,\n            \"bootcamp\": \"5d725a1b7b292f5f8ceff788\",\n            \"createdAt\": \"2025-09-21T19:58:43.426Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"5d725cfec4ded7bcb480eaa7\",\n            \"title\": \"IOS Development\",\n            \"description\": \"Get started building mobile applications for IOS using Swift and other tools\",\n            \"weeks\": 8,\n            \"tuition\": 6000,\n            \"minimumSkill\": \"intermediate\",\n            \"scholarshipAvailable\": false,\n            \"bootcamp\": \"5d725a1b7b292f5f8ceff788\",\n            \"createdAt\": \"2025-09-21T19:58:43.426Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"5d725cd2c4ded7bcb480eaa2\",\n            \"title\": \"UI/UX\",\n            \"description\": \"In this course you will learn to create beautiful interfaces. It is a mix of design and development to create modern user experiences on both web and mobile\",\n            \"weeks\": 12,\n            \"tuition\": 10000,\n            \"minimumSkill\": \"intermediate\",\n            \"scholarshipAvailable\": false,\n            \"bootcamp\": \"5d713a66ec8f2b88b8f830b8\",\n            \"createdAt\": \"2025-09-21T19:58:43.424Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"5d725ce8c4ded7bcb480eaa3\",\n            \"title\": \"Web Design & Development\",\n            \"description\": \"Get started building websites and web apps with HTML/CSS/JavaScript/PHP. We teach you\",\n            \"weeks\": 10,\n            \"tuition\": 12000,\n            \"minimumSkill\": \"beginner\",\n            \"scholarshipAvailable\": false,\n            \"bootcamp\": \"5d725a037b292f5f8ceff787\",\n            \"createdAt\": \"2025-09-21T19:58:43.425Z\",\n            \"__v\": 0\n        }\n    ]\n}\n\n ```\n\n## **Error Response**\n\n```\n{\n  \"success\": false,\n  \"error\": \"No Courses Found\",\n  \"data\": null\n}\n\n ```"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Courses for a specific bootcamp",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/bootcamps/5d713995b721c3bb38c1f5d0/courses",
+              "host": ["{{base_url}}"],
+              "path": ["bootcamps", "5d713995b721c3bb38c1f5d0", "courses"]
+            },
+            "description": "### 3\\. Get Courses for a Specific Bootcamp\n\n- **Endpoint:** `GET /api/v1/bootcamps/:bootcampId/courses`\n    \n- **Access:** Public\n    \n- **Description:** Retrieves all courses that belong to a specific bootcamp. The `bootcampId` parameter in the URL identifies the bootcamp.\n    \n\n**URL Parameters:**\n\n| Parameter | Type | Description |\n| --- | --- | --- |\n| `bootcampId` | String | The ID of the bootcamp to filter courses by. |\n\n**Example Response:**\n\n``` json\n{\n  \"success\": true,\n  \"count\": 2,\n  \"data\": [\n    {\n      \"_id\": \"654321abcd\",\n      \"title\": \"Full Stack Web Development\",\n      \"description\": \"Learn to build web applications using Node.js, React, and MongoDB.\",\n      \"weeks\": 12,\n      \"tuition\": 1200,\n      \"minimumSkill\": \"beginner\",\n      \"scholarshipAvailable\": true,\n      \"bootcamp\": \"12345bootcamp\",\n      \"createdAt\": \"2025-09-24T10:00:00Z\"\n    },\n    {\n      \"_id\": \"654322efgh\",\n      \"title\": \"Frontend Development\",\n      \"description\": \"Master HTML, CSS, and JavaScript to build responsive websites.\",\n      \"weeks\": 8,\n      \"tuition\": 800,\n      \"minimumSkill\": \"beginner\",\n      \"scholarshipAvailable\": false,\n      \"bootcamp\": \"12345bootcamp\",\n      \"createdAt\": \"2025-09-24T10:00:00Z\"\n    }\n  ]\n}\n\n ```"
+          },
+          "response": []
+        },
+        {
+          "name": "Create a Course",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{vault:json-web-token}}",
+                "type": "text",
+                "disabled": true
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Web Development new Test 2\",\n    \"description\": \"This course will teach you how to build high quality web applications with technologies like React, Node.js, PHP & Laravel\",\n    \"weeks\": 8,\n    \"tuition\": 8000,\n    \"minimumSkill\": \"beginner\",\n    \"scholarshipsAvailable\": false,\n    \"bootcamp\": \"5d713995b721c3bb38c1f5d0\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/courses",
+              "host": ["{{base_url}}"],
+              "path": ["courses"]
+            },
+            "description": "### Create a New Course\n\n- **Endpoint:** `POST /api/v1/courses`\n    \n- **Access:** Private (Admin)\n    \n- **Description:** Creates a new course and associates it with a specific bootcamp. Only admins are allowed to perform this action.\n    \n\n**Request Body Parameters:**\n\n| Field | Type | Required | Description |\n| --- | --- | --- | --- |\n| `title` | String | Yes | The name of the course. |\n| `description` | String | Yes | A detailed description of the course. |\n| `weeks` | Number | Yes | Duration of the course in weeks. |\n| `tuition` | Number | Yes | Tuition cost for the course. |\n| `minimumSkill` | String | Yes | Required skill level (`beginner`, `intermediate`, `advanced`). |\n| `scholarshipAvailable` | Boolean | No | Indicates if scholarships are available (default: `false`). |\n| `bootcamp` | ObjectId | Yes | The ID of the bootcamp this course belongs to. |\n\n**Example Request:**\n\n``` json\n{\n  \"title\": \"Advanced JavaScript\",\n  \"description\": \"Deep dive into ES6+, asynchronous programming, and modern JS frameworks.\",\n  \"weeks\": 6,\n  \"tuition\": 900,\n  \"minimumSkill\": \"intermediate\",\n  \"scholarshipAvailable\": true,\n  \"bootcamp\": \"12345bootcamp\"\n}\n\n ```"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Single Course",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/courses/5d725c84c4ded7bcb480eaa0",
+              "host": ["{{base_url}}"],
+              "path": ["courses", "5d725c84c4ded7bcb480eaa0"]
+            },
+            "description": "## Get a Single Course\n\n- **Endpoint:** `GET /api/v1/courses/:id`\n    \n- **Access:** Public\n    \n\n### Description\n\nRetrieves details of a single course by its unique ID. The response includes the course information along with selected details of the associated bootcamp (e.g., name and description)."
+          },
+          "response": []
+        },
+        {
+          "name": "Update a Course",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Web Development\",\n    \"description\": \"This course will teach you how to build high quality web applications with technologies like React, Node.js, PHP & Laravel\",\n    \"weeks\": 8,\n    \"tuition\": 8000,\n    \"minimumSkill\": \"advanced\",\n    \"scholarshipsAvailable\": false,\n    \"bootcamp\": \"5d725a1b7b292f5f8ceff788\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/courses/68d68ec44fc5d289f466da17",
+              "host": ["{{base_url}}"],
+              "path": ["courses", "68d68ec44fc5d289f466da17"]
+            },
+            "description": "### Update a Course\n\n- **Endpoint:** `PUT /api/v1/courses/:id`\n    \n- **Access:** Private (Admin)\n    \n- **Description:** Updates an existing course by its ID. Only admins are allowed to perform this action. You can send one or multiple fields to update.\n    \n\n**URL Parameters:**\n\n| Parameter | Type | Description |\n| --- | --- | --- |\n| `id` | String | The ID of the course to update. |\n\n**Request Body Parameters:** (Send only the fields you want to update)\n\n| Field | Type | Description |\n| --- | --- | --- |\n| `title` | String | The name of the course. |\n| `description` | String | A detailed description of the course. |\n| `weeks` | Number | Duration of the course in weeks. |\n| `tuition` | Number | Tuition cost for the course. |\n| `minimumSkill` | String | Required skill level (`beginner`, `intermediate`, `advanced`). |\n| `scholarshipAvailable` | Boolean | Indicates if scholarships are available. |\n| `bootcamp` | ObjectId | The ID of the bootcamp this course belongs to. |"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete a Course",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/courses/5d725c84c4ded7bcb480eaa0",
+              "host": ["{{base_url}}"],
+              "path": ["courses", "5d725c84c4ded7bcb480eaa0"]
+            },
+            "description": "### Delete a Course\n\n- **Endpoint:** `DELETE /api/v1/courses/:id`\n    \n- **Access:** Private (Admin)\n    \n- **Description:** Deletes a specific course by its ID. Only admins are allowed to perform this action. Once deleted, the course cannot be recovered.\n    \n\n**URL Parameters:**\n\n| Parameter | Type | Description |\n| --- | --- | --- |\n| `id` | String | The ID of the course to delete. |"
+          },
+          "response": []
+        }
+      ],
+      "description": "# **Courses API Documentation**\n\n**Course Model**\n\nA **Course** represents a learning module that users can enroll in. Each course belongs to a bootcamp and includes detailed information for students.\n\n**Schema Fields:**\n\n| **Field** | **Type** | **Description** |\n| --- | --- | --- |\n| title | String | The name of the course. **Required.** |\n| description | String | A detailed description of the course. **Required.** |\n| weeks | Number | Duration of the course in weeks. **Required.** |\n| tuition | Number | Cost of the course. **Required.** |\n| minimumSkill | String | Skill level required (beginner, intermediate, advanced). **Required.** |\n| scholarshipAvailable | Boolean | Whether scholarships are available. Default: false. |\n| bootcamp | ObjectId | Reference to the Bootcamp this course belongs to. **Required.** |\n| createdAt | Date | Date the course was created. Default: Date.now |\n\n---\n\n---\n\n### **Notes**\n\n- All responses include a success boolean and data object/array.\n    \n- Courses are **always associated with a bootcamp**.\n    \n- Query parameters for GET /api/v1/courses may include select, sort, page, and limit."
+    },
+    {
+      "name": "Ratings",
+      "item": [
+        {
+          "name": "Get Reviews",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "content-type",
+                "value": "application/json",
+                "description": "JSON format",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/reviews",
+              "host": ["{{base_url}}"],
+              "path": ["reviews"]
+            },
+            "description": "## Get All Reviews\n\n**GET** `/api/v1/reviews`\n\n**Access:** Public\n\n---\n\n### Description\n\nFetches all reviews. Supports advanced query filtering, sorting, and pagination using middleware (\\`res.advanceResults\\`).\n\n### Example Response\n\n``` json\n{\n  \"success\": true,\n  \"count\": 2,\n  \"data\": [\n    {\n      \"_id\": \"6512a8f9e18a5b3c9c1aab77\",\n      \"title\": \"Great Bootcamp\",\n      \"text\": \"I learned so much here!\",\n      \"rating\": 9,\n      \"bootcamp\": \"6512a8f9e18a5b3c9c1aab12\",\n      \"user\": \"6501a8f9e18a5b3c9c1aab15\"\n    },\n    {\n      \"_id\": \"6512a8f9e18a5b3c9c1aab78\",\n      \"title\": \"Not bad\",\n      \"text\": \"Good instructors but could improve the projects.\",\n      \"rating\": 7,\n      \"bootcamp\": \"6512a8f9e18a5b3c9c1aab13\",\n      \"user\": \"6501a8f9e18a5b3c9c1aab16\"\n    }\n  ]\n}\n\n ```"
+          },
+          "response": []
+        },
+        {
+          "name": "Get a Review",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "content-type",
+                "value": "application/json",
+                "description": "JSON format",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/reviews/5d7a514b5d2c12c7449be027",
+              "host": ["{{base_url}}"],
+              "path": ["reviews", "5d7a514b5d2c12c7449be027"]
+            },
+            "description": "## Get a Single Review\n\n**GET** `/api/v1/reviews/:id`\n\n**Access:** Public\n\n---\n\n### Description\n\nFetches a single review by its id. Populates related bootcamp and user fields (only name is returned).\n\n### Example Response\n\n``` json\n{\n  {\n  \"success\": true,\n  \"message\": \"Found Review\",\n  \"data\": {\n    \"_id\": \"6512a8f9e18a5b3c9c1aab77\",\n    \"title\": \"Great Bootcamp\",\n    \"text\": \"I learned so much here!\",\n    \"rating\": 9,\n    \"bootcamp\": {\n      \"_id\": \"6512a8f9e18a5b3c9c1aab12\",\n      \"name\": \"Code Mastery Bootcamp\"\n    },\n    \"user\": {\n      \"_id\": \"6501a8f9e18a5b3c9c1aab15\",\n      \"name\": \"John Doe\"\n    }\n  }\n}\n}\n\n ```\n\n### Request Parameters\n\n- `id` (required): The ID of the review to fetch."
+          },
+          "response": []
+        },
+        {
+          "name": "Create a Review",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "content-type",
+                "value": "application/json",
+                "description": "JSON format",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Learned a ton!\",\n    \"comment\": \"This is a outstanding bootcamp and i love it\",\n    \"rating\": 8\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/reviews/bootcamp/5d725a1b7b292f5f8ceff788",
+              "host": ["{{base_url}}"],
+              "path": ["reviews", "bootcamp", "5d725a1b7b292f5f8ceff788"]
+            },
+            "description": "### Create a Rating\n\n**POST** `/api/v1/reviews/:bootcampId/ratings`  \n**Access:** Private/admin\n\n---\n\n### Description\n\nCreates a rating for a specific bootcamp. Populates related bootcamp field (only name is returned).\n\n### Request Body:\n\n``` json\n{\n  \"title\": \"Great Bootcamp\",\n  \"text\": \"The instructors were amazing and the content was well structured.\",\n  \"rating\": 10\n}\n\n ```\n\n### Request Params\n\n- `bootcampId` (required): The ID of the bootcamp to rate."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Review",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "content-type",
+                "value": "application/json",
+                "description": "JSON format",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/reviews/68db12d2a0e024fefe4a0daf",
+              "host": ["{{base_url}}"],
+              "path": ["reviews", "68db12d2a0e024fefe4a0daf"]
+            },
+            "description": "### Delete a Rating\n\n**DELETE** `/api/v1/reviews/:id`\n**Access:** Private/admin\n\n---\n\n### Description\n\nDeletes a rating for a specific review. Populates related bootcamp field (only name is returned).\n\n### Request Params\n\n- `id` (required): The ID of the review to delete."
+          },
+          "response": []
+        },
+        {
+          "name": "Update a Review",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "content-type",
+                "value": "application/json",
+                "description": "JSON format",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"rating\": 9\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/reviews/68db12d2a0e024fefe4a0daf",
+              "host": ["{{base_url}}"],
+              "path": ["reviews", "68db12d2a0e024fefe4a0daf"]
+            },
+            "description": "### Update a Rating\n\n**PUT** `/api/v1/reviews/:id`  \n**Access:** Private/admin\n\n---\n\n### Description\n\nUpdates a rating for a specific review. Populates related bootcamp field (only name is returned).\n\n### Request Body:\n\n``` json\n{\n  \"title\": \"Updated Review\",\n  \"rating\": 8\n}\n\n ```\n\n### Request Params\n\n- `id` (required): The ID of the review to update."
+          },
+          "response": []
+        }
+      ],
+      "description": "# Rating/Review Model\n\nThe **Review** model stores feedback submitted by users for specific bootcamps. Each review includes a title, numerical rating, and detailed comment. Reviews are tied to both the user who submitted them and the bootcamp they are reviewing.\n\n## Fields\n\n- **title** (string, required, max: 100)  \n    A short, descriptive title for the review. Example: `\"Great Bootcamp Experience\"`.\n    \n- **rating** (number, required, range: 1–10)  \n    Numerical score provided by the user, where `1` = very poor and `10` = excellent.\n    \n- **comment** (string, required, max: 500)  \n    The detailed feedback from the user about their experience.\n    \n- **user** (ObjectId → User, required)  \n    Reference to the **User** who submitted the review. Ensures only registered users can leave reviews.\n    \n- **bootcamp** (ObjectId → Bootcamp, required)  \n    Reference to the **Bootcamp** being reviewed.\n    \n- **createdAt** (Date, default: now)  \n    The date and time when the review was created.\n    \n- **updatedAt** (Date, default: now)  \n    The date and time when the review was last updated.\n    \n\n## Indexes & Constraints\n\n- **Unique per user & bootcamp**:  \n    Each user can submit **only one review per bootcamp**.\n    \n\n``` javascript\nreviewSchema.index({ bootcamp: 1, user: 1 }, { unique: true });\n\n ```"
+    },
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "register user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.environment.set(\"TOKEN\", pm.response.json().token);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "content-type",
+                "value": "application/json",
+                "description": "JSON format",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Souvik 2\",\n    \"email\": \"souvikinfo-new@gmail.com\",\n    \"role\": \"admin\",\n    \"password\": \"12345667\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "register"]
+            },
+            "description": "## Register a User\n\n**POST** `/api/v1/auth/register`\n\n**Access:** Public\n\n---\n\n### Description\n\nRegisters a new user in the system with `name`, `email`, `password`, and `role`. Returns a JWT token and user details.\n\n### Request Body\n\n``` json\n{\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"password\": \"secret123\",\n  \"role\": \"user\"\n}\n\n ```\n\n### Example Response\n\n``` json\n{\n  \"success\": true,\n  \"message\": \"User Registerd Successfully\",\n  \"data\": {\n    \"_id\": \"6501a8f9e18a5b3c9c1aab12\",\n    \"name\": \"John Doe\",\n    \"email\": \"john@example.com\",\n    \"role\": \"user\",\n    \"createdAt\": \"2025-10-01T10:30:00.000Z\"\n  },\n  \"token\": \"jwt_token_here\"\n}\n\n ```"
+          },
+          "response": []
+        },
+        {
+          "name": "login user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.environment.set(\"TOKEN\", pm.response.json().token);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "content-type",
+                "value": "application/json",
+                "description": "JSON format",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"souvikinfo-new@gmail.com\",\n    \"password\": \"12345667\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "### Login User\n\n**POST** `/api/v1/auth/login`  \n**Access:** Public\n\n---\n\n### Description\n\nLogs in a user using email and password. Returns a JWT token and user details.\n\n### Request Body:\n\n``` json\n{\n  \"email\": \"john@example.com\",\n  \"password\": \"secret123\"\n}\n\n ```"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Login User by Token",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "content-type",
+                "value": "application/json",
+                "description": "JSON format",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"admin44@gmail.com\",\n    \"password\": \"12345667\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/me",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "me"]
+            },
+            "description": "### Get Current User\n\n**GET** `/api/v1/auth/me`\n**Access:** Private/admin or publisher (JWT Token required)\n\n---\n\n### Description\n\nRetrieves the currently logged-in user’s details using their JWT token."
+          },
+          "response": []
+        },
+        {
+          "name": "forgetPassword",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "content-type",
+                "value": "application/json",
+                "description": "JSON format",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"souvikinfo@gmail.com\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/forgetpassword",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "forgetpassword"]
+            },
+            "description": "### Forgot Password\n\n**GET** `/api/v1/auth/forgotpassword`  \n**Access:** Public\n\n---\n\n### Description\n\nGenerates a reset password token and sends a reset link to the user’s email.\n\n### Request Body\n\n``` json\n{\n  \"email\": \"john@example.com\"\n}\n\n ```"
+          },
+          "response": []
+        },
+        {
+          "name": "reset password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "content-type",
+                "value": "application/json",
+                "description": "JSON format",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"password\": \"deltainfo\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/resetpassword/793459f5b7e926fab7573ac6f9d171e084a909b2",
+              "host": ["{{base_url}}"],
+              "path": [
+                "auth",
+                "resetpassword",
+                "793459f5b7e926fab7573ac6f9d171e084a909b2"
+              ]
+            },
+            "description": "### Reset Password\n\n**POST** `/api/v1/auth/resetpassword/:token`  \n**Access:** Public\n\n---\n\n### Description\n\nResets the user's password using the provided reset token and new password.\n\n### Request Body:\n\n``` json\n{\n  \"success\": true,\n  \"message\": \"Password Reset Successfully\",\n  \"token\": \"jwt_token_here\"\n}\n\n ```\n\n### Request Params\n\n- `token` (required): The reset password token received in the email."
+          },
+          "response": []
+        },
+        {
+          "name": "update user details",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "content-type",
+                "value": "application/json",
+                "description": "JSON format",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"souvikinfo2@gmail.com\",\n    \"name\": \"Souvik-demo\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/updatedetails",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "updatedetails"]
+            },
+            "description": "### Update User Details\n\n**PUT** `/api/v1/auth/updateuser`  \n**Access:** Private/admin or publisher (JWT Token required)\n\n---\n\n### Description\n\nUpdates the details of a user using their JWT token. Only the fields provided in the request body will be updated.\n\n### Request Body:\n\n``` json\n{\n  \"name\": \"Updated Name\",\n  \"email\": \"updated@example.com\"\n}\n\n ```"
+          },
+          "response": []
+        },
+        {
+          "name": "Logout User",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/logout",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "auth", "logout"]
+            },
+            "description": "### Logout User\n\n**GET** `/api/v1/auth/logout`\n**Access:** Public\n\n---\n\n### Description\n\nLogs out the current user by clearing the JWT cookie."
+          },
+          "response": []
+        }
+      ],
+      "description": "# Auth API Endpoints\n\nAuthentication and authorization routes for the MentorGrid API.  \nThese endpoints manage user registration, login, JWT tokens, password reset, and user profile updates."
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [""]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [""]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://mentorgrid.live/api/v1"
+    }
+  ]
 }
