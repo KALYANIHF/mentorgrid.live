@@ -5,6 +5,20 @@ function setTheme(themeName) {
   document.body.className = themeName;
 }
 const slider = document.querySelector("#slider");
+const today = document.querySelector("#todaydate");
+const date = new Date();
+
+today.innerHTML = new Intl.DateTimeFormat("en-Us", {
+  weekday: "long",
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+  hour12: true,
+  minute: "numeric",
+  hour: "numeric",
+  second: "numeric",
+}).format(date);
+
 function toggleTheme() {
   if (localStorage.getItem("theme") === "theme-light") {
     setTheme("theme-dark");
