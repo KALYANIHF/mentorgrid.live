@@ -11,7 +11,9 @@
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.10",
+    "newman": "^6.2.1",
+    "newman-reporter-htmlextra": "^1.23.1"
   },
   "dependencies": {
     "@dotenvx/dotenvx": "^1.49.0",
@@ -29,8 +31,6 @@
     "mongoose": "^8.18.1",
     "morgan": "^1.10.1",
     "nanoid": "^5.1.6",
-    "newman": "^6.2.1",
-    "newman-reporter-htmlextra": "^1.23.1",
     "node-geocoder": "^4.4.1",
     "nodemailer": "^7.0.6",
     "slugify": "^1.6.6",
