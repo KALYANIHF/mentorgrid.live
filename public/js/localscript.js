@@ -6,6 +6,7 @@ function setTheme(themeName) {
 }
 const slider = document.querySelector("#slider");
 const today = document.querySelector("#todaydate");
+const currentyear = document.querySelector("#currentyear");
 const date = new Date();
 
 today.innerHTML = new Intl.DateTimeFormat("en-Us", {
@@ -18,6 +19,7 @@ today.innerHTML = new Intl.DateTimeFormat("en-Us", {
   hour: "numeric",
   second: "numeric",
 }).format(date);
+currentyear.innerHTML = date.getFullYear();
 
 function toggleTheme() {
   if (localStorage.getItem("theme") === "theme-light") {
